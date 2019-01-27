@@ -7,7 +7,7 @@ const logic = {
         if(typeof callback !== 'function') throw TypeError (`${callback} is not a function`);
 
         spotifyApi.searchArtists(query, callback);
-    }
+    },
 
     retrieveAlbums(artistId, callback) {
         if(typeof artistId !== 'string') throw TypeError (`${artistId} is not a string`);
@@ -16,7 +16,27 @@ const logic = {
 
         if(typeof callback !== 'function') throw TypeError (`${callback} is not a function`);
 
-        spotifyApi.searchArtists(artistId, callback);
+        spotifyApi.retrieveAlbums(artistId, callback);
+    },
+
+    retrieveTracks(trackId, callback) {
+        if(typeof trackId !== 'string') throw TypeError (`${trackId} is not a string`);
+
+        if(!trackId.trim().length) throw Error('trackId is empty');
+
+        if(typeof callback !== 'function') throw TypeError (`${callback} is not a function`);
+
+        spotifyApi.retrieveTracks(trackId, callback);
+    },
+    
+    retrieveSelectedTracks(trackId, callback) {
+        if(typeof trackId !== 'string') throw TypeError (`${trackId} is not a string`);
+
+        if(!trackId.trim().length) throw Error('trackId is empty');
+
+        if(typeof callback !== 'function') throw TypeError (`${callback} is not a function`);
+
+        spotifyApi.retrieveTracks(trackId, callback);
     }
 }
 
