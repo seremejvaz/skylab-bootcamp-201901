@@ -1,4 +1,14 @@
 class Home extends React.Component {
+    state = {query: ''};
+    
+    handleSearchInput = event => {
+        this.setState({query: event.target.value})
+    }
+
+    handleSearch = () => {
+        const  {state: {query}, props: {onSearch}} = this
+        onSearch(query);
+    }
 
     render() {
         return (
@@ -8,8 +18,9 @@ class Home extends React.Component {
             </header>
             <div>
                 <p>Search</p>
-                <input type="text" name="artist" onChange='#' />
+                <input type="text" name="artist" onChange={this.handleSearchInput} />
             </div>
+            <button onClick={this.handleSearch}>Search</button>
         </section>)
     }
 

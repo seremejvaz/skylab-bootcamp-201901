@@ -26,7 +26,7 @@ class Register extends React.Component {
   //handleSubmitRegister
 
   handleLinkRegister = () => {
-      const ({props: {onLink}}) = this;
+      const {props: {onLink}} = this;
       onLink()
   };
 
@@ -61,4 +61,4 @@ class Register extends React.Component {
       </form>
     );
   }
-}
+};
