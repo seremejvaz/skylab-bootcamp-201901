@@ -1,5 +1,5 @@
 spotifyApi.token =
-  "BQB71-wh109zTuUg6xEptX3A3seMybo7IaDmP8dBw7zPi2jW4PEzJPKT_ct4c5dRm6rj8-wPF-oSUaFzlmS6SNkEuHgyQI0uXiSdrqI-j5odFbEv1cHgpWCPTMjLfx9W3n1IB-yPFUQnCMBG0h-T";
+  "BQCP8MQiq6aL3vSVIMx6blvVpKN4i_Vpx-c5T7hFvOlkGCagZlSxyS_t8rUHKsfKyGQEeSstOVz6AHTG1dI1syPBu4twT2yihVOs5v_DfUgFihDP5RX1Vag1-jhymDiLrhHjW89n2uH2lKZhOXWl";
 
 
 describe("logic", function() {
@@ -31,27 +31,65 @@ describe("logic", function() {
   });
 
   describe('retrieveAlbums', function(){
-    it('should succed on matching query', function(done){
+    it('should succed on matching artistId', function(done){
         const artistId = "0du5cEVh5yTK9QJze8zA0C";
 
-        logic.retrieveAlbums(artistId, (error, albums) => {
+        logic.retrieveAlbums(artistId, function(error, albums) {
             expect(error).toBeUndefined();
-
             expect(albums).toBeDefined();
             expect(albums instanceof Array).toBeTruthy();
             expect(albums.length).toBeGreaterThan(0);
-            albums.forEach(({ name }) =>
-            expect(name.toLowerCase()).toContain(artistId)
-          );
-  
+            
           done();
         })
     })
 
     it('should fail on empty artistId', function() {
-        const query = '';
+        const artistId = '';
 
-        expect(() => logic.retrieveAlbums(query, function (error, tracks) { })).toThrowError('album is empty');
+        expect(() => logic.retrieveAlbums(artistId, function (error, tracks) { })).toThrowError('artistId is empty');
+    })
+  })
+
+describe('retrieveTracks', function(){
+    it('should succed on matching trackId', function(done){
+        const trackId = "6b8Be6ljOzmkOmFslEb23P";
+
+        logic.retrieveTracks(trackId, function(error, tracks) {
+            expect(error).toBeUndefined();
+            expect(tracks).toBeDefined();
+            expect(tracks instanceof Array).toBeTruthy();
+            expect(tracks.length).toBeGreaterThan(0);
+  
+          done();
+        })
+    })
+
+    it('should fail on empty trackId', function() {
+        const trackId = '';
+
+        expect(() => logic.retrieveTracks(trackId, function (error, tracks) { })).toThrowError('trackId is empty');
+    })
+  })
+
+describe('retrieveSelectedTracks', function(){
+    /*it('should succed on matching trackId', function(done){
+        const trackId = "6b8Be6ljOzmkOmFslEb23P";
+
+        logic.retrieveSelectedTracks(trackId, function(error, tracks) {
+            expect(error).toBeUndefined();
+            expect(tracks).toBeDefined();
+            expect(tracks instanceof Array).toBeTruthy();
+            expect(tracks.length).toBeGreaterThan(0);
+  
+          done();
+        })
+    })*/
+
+    it('should fail on empty trackId', function() {
+        const trackId = '';
+
+        expect(() => logic.retrieveSelectedTracks(trackId, function (error, tracks) { })).toThrowError('trackId is empty');
     })
   })
 });

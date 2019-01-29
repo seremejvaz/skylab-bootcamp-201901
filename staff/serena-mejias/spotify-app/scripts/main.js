@@ -1,5 +1,5 @@
 spotifyApi.token =
-  "BQB71-wh109zTuUg6xEptX3A3seMybo7IaDmP8dBw7zPi2jW4PEzJPKT_ct4c5dRm6rj8-wPF-oSUaFzlmS6SNkEuHgyQI0uXiSdrqI-j5odFbEv1cHgpWCPTMjLfx9W3n1IB-yPFUQnCMBG0h-T";
+  "BQD27-06UTlgy8GLp4RaFaNISU0bUJC62lOQt6HkLI8M15RcC8CAAw9HR3S94YK0J1i5hAi2qRYZX-WFtIR75xMS06eITByurcKUyS2x9Swxma6s-T5d04FzfBzpYUzYu3vdni3MavDyd5LmxeQs";
 
 const searchPanel = new SearchPanel();
 const artistsPanel = new ArtistsPanel();

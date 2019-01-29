@@ -15,6 +15,10 @@ class SearchPanel extends Panel {
     super(
       $(
         `<section class="search__container">
+                <header>
+                    <h1>Spotify App</h1>
+                    <img src="images/spotify.png">
+                </header>
                 <form>
                     <input type="text" name="query" placeholder="Search an artist">
                     <button class='btn btn-primary btn-sm' type="submit">Search</button>
