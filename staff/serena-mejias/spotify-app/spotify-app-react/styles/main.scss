@@ -18,12 +18,7 @@ body {
   }
 }
 
-h3 {
-  @extend %middle-header;
-}
-
 .login {
-  
   &__buttons {
     display: flex;
     justify-content: space-between;
@@ -31,10 +26,21 @@ h3 {
       color: $main-color;
     }
   }
+  h3 {
+    @extend %middle-header;
+  }
 }
 
 .home {
+  display: flex;
+  align-items: center;
+
   &__search {
     margin-bottom: 0.5em;
+  }
+
+  &__header {
+    @extend %middle-header;
+    margin-left: 1.5em;
   }
 }

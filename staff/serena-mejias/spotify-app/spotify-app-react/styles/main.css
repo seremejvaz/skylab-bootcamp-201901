@@ -1,4 +1,4 @@
-h3 {
+.home__header, .login h3 {
   font-size: 2em;
   padding-bottom: 0.5em;
 }
@@ -23,9 +23,15 @@ body h1 {
 .login__buttons--registerLink {
   color: #c42c45;
 }
-
+.home {
+  display: flex;
+  align-items: center;
+}
 .home__search {
   margin-bottom: 0.5em;
+}
+.home__header {
+  margin-left: 1.5em;
 }
 
 /*# sourceMappingURL=main.css.map */

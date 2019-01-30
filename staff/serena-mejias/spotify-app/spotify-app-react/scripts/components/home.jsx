@@ -12,20 +12,22 @@ class Home extends React.Component {
 
     render() {
         return (
-            <div className='columns'>
-      <div className='column'>
-            <header>
+    <div className='home columns'>
+        <div className='column  '>
+            <header className='home__header'>
                 <h3>Home</h3>
             </header>
-      </div>
-        <section className='home column is-half'>
+        </div>
+        <section className='column   field has-addons'>
                 <div className='home__search control'>
-                    <input className='input is-small is-rounded'    type="text" name="artist" onChange={this.handleSearchInput} />
+                    <input className='input is-small is-rounded'type="text" name="artist" onChange={this.handleSearchInput} />
                 </div>
-            <button onClick={this.handleSearch} className='button is-dark is-small is-rounded'>Search</button>
+                <div className='control'>
+                    <button onClick={this.handleSearch} className='button is-dark is-small is-rounded'>Search</button>
+                </div>
         </section>
-        <div className='column'></div>
-        </div>)
+        </div>
+        )
     }
 
 }
