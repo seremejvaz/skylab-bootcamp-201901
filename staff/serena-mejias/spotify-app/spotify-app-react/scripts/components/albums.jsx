@@ -1,19 +1,25 @@
 class Album extends React.Component {
-  state = { name: "", id: "", image: "" };
+
+handleSearchTracks = (query) => {
+    const {
+        props: { onSearchTracks }
+    } = this;
+    onSearchTracks(query);
+}
 
   render() {
-    const {
+    const { handleSearchTracks,
       props: { albums }
     } = this;
 
     return (
-      <section class="results__albums">
+      <section className="results__albums">
         <ul>
           {albums.map(({ name, id, images }) => {
             const imageAlbums = images[0].url;
             return (
-              <li class="album__list" data-id={id}>
-                <img class="albums__img" src={imageAlbums} />
+              <li key={id} className="album__list" data-id={id} onClick={() => handleSearchTracks(id)}>
+                <img className="albums__img" src={imageAlbums} />
                 <p>{name}</p>
               </li>
             );

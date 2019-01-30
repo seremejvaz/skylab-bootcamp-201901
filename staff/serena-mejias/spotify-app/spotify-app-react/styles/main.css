@@ -1,91 +1,31 @@
+h3 {
+  font-size: 2em;
+  padding-bottom: 0.5em;
+}
+
 body {
-  font-family: "Josefin Sans", sans-serif;
+  font-family: "Pacifico", cursive;
   margin: 0;
   display: inline;
-  color: #007bff;
 }
-body #root {
+body h1 {
+  color: #c42c45;
+  font-size: 3em;
   margin-left: 0.5em;
-  margin-right: 0.5em;
-  flex-direction: row;
-  align-items: center;
+  margin-bottom: 1em;
+  padding: 0.5em;
 }
-body .search__container {
-  align-items: flex-end;
-  flex: 1;
+
+.login__buttons {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
-body header {
-  display: flex;
-  flex-direction: row;
-}
-body header img {
-  height: 100px;
-  width: 100px;
-}
-body header h1 {
-  font-weight: 700;
-  padding: 0.75em 0.25em;
-}
-body form {
-  padding: 0.5em 0em 0.5em 0em;
-}
-body form input {
-  padding-left: 0.5em;
-  border: solid 0.25px #007bff;
-}
-body ul {
-  list-style-type: none;
-}
-body ul li {
-  margin: 0.5em;
+.login__buttons--registerLink {
+  color: #c42c45;
 }
 
-.albums__list {
-  font-size: 0.75em;
-}
-
-.card__album {
-  width: 250px;
-}
-.card__album .card-img {
-  opacity: 0.7;
-}
-
-.card-colums {
-  padding: 0;
-}
-
-.albums__img {
-  width: 5em;
-  height: 5em;
-}
-
-.results__container.small .card__album {
-  display: none;
-}
-.results__container.small .card__album.selected {
-  display: inline-block;
-}
-
-.results__albums {
-  display: inline-block;
-  vertical-align: top;
-  padding-top: 3em;
-}
-
-.results__albums.selected .album__list {
-  display: none;
-}
-.results__albums.selected .album__list.selectedAlbum {
-  display: inline-block;
-}
-
-.results__tracks {
-  display: inline-block;
-  padding-top: 3em;
-  padding-left: 3em;
+.home__search {
+  margin-bottom: 0.5em;
 }
 
 /*# sourceMappingURL=main.css.map */

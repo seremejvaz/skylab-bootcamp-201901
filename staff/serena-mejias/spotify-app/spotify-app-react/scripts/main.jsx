@@ -4,4 +4,4 @@
 ReactDOM.render(<App />, document.getElementById('root'));
 
 spotifyApi.token =
-  "BQBelEBolJWjXeGxDypF_uMrxFpZX_Ey3n4lWZZZDjV51CDPb0H0hKMp1TyD1vZhXrD9uevTrE9saxEdvg3lRrKOAsno_gBuQZl1FNx86Rso26sh0MoGADtyxkCjlmqZ-36TTi2u7DPmTCjrWynD";
+  "BQChxwiza49CuwV4LwS-LMgkEvyB6pK5twtXGLhLTVqPGJgMzo4_q_P5WIU697Pwq33NNSFXOFKdTXzvPcyJwy3TLhDgR-_13j-_jSxD1jPGCgrcAzwb-s08UGNbllWaf2B2vdgyRXOkkt7n2Mpe";

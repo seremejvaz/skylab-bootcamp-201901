@@ -26,25 +26,35 @@ class Login extends React.Component {
   render() {
 
     return (
-      <section>
+      <div className='columns'>
+      <div className='column'></div>
+      <section className='login column'>
         <h3>Login</h3>
         <form>
-            <div>
-                <label>Email</label>  
-                <input type="email" name="email" onChange={this.handleEmail} />
+            <div className='login__input field'>
+                <label className='label is-small'>Email</label>  
+                <div className='control'>
+                  <input className='input is-small is-rounded' type="email" name="email" onChange={this.handleEmail} />
+                </div>
             </div>
-            <div>
-                <label>Password</label>
-                <input
-                    type="password"
-                    name="password"
-                    onChange={this.handlePassword}
-                />
+            <div className='login__input field'>
+                <label className='label is-small'>Password</label>
+                <div className='control'>
+                  <input className='input is-small is-rounded'
+                      type="password"
+                      name="password"
+                      onChange={this.handlePassword}
+                  />
+                </div>
             </div>
-            <button onClick={this.handleSubmit}>Login</button>
-          <a href="#" onClick={this.handleLink}>Register</a>
+            <div className='login__buttons'>
+                <button onClick={this.handleSubmit} className='button is-dark is-small is-rounded'>Login</button>
+                <a className='login__buttons--registerLink'href="#" onClick={this.handleLink}>Register</a>
+            </div>
         </form>
       </section>
+      <div className='column'></div>
+      </div>
     );
   }
 }

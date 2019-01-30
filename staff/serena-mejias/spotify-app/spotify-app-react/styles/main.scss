@@ -1,94 +1,40 @@
+$main-color: rgb(196, 44, 69);
+
+%middle-header {
+  font-size: 2em;
+  padding-bottom: 0.5em;
+}
+
 body {
-  font-family: "Josefin Sans", sans-serif;
+  font-family: "Pacifico", cursive;
   margin: 0;
   display: inline;
-  color:#007bff;
-    
-  #root {
+  h1 {
+    color: $main-color;
+    font-size: 3em;
     margin-left: 0.5em;
-    margin-right: 0.5em;
-    flex-direction: row;
-    align-items: center;
+    margin-bottom: 1em;
+    padding: 0.5em;
   }
-  .search__container {
-    align-items: flex-end;
-    flex: 1;
+}
+
+h3 {
+  @extend %middle-header;
+}
+
+.login {
+  
+  &__buttons {
     display: flex;
-    justify-content: flex-end;
-  }
-  header {
-      display: flex;
-      flex-direction: row;
-      img {
-          height: 100px;
-          width: 100px;
-      }
-      h1 {
-        font-weight: 700;
-        padding: 0.75em 0.25em;
-        
-      }
-  }
-  form {
-    padding: 0.5em 0em 0.5em 0em;
-    input {
-        padding-left: 0.5em;
-        border: solid 0.25px #007bff;
-    }
-  }
-  ul {
-    list-style-type: none;
-    li {
-      margin: 0.5em;
-    }
-  }
-}
-.albums__list {
-    font-size: 0.75em;
-}
-.card__album {
-  width: 250px;
-  .card-img {
-    opacity: 0.7;
-  }
-}
-
-.card-colums {
-  padding: 0;
-}
-
-.albums__img {
-  width: 5em;
-  height: 5em;
-}
-
-.results__container.small {
-  .card__album {
-    display: none;
-    &.selected {
-      display: inline-block;
+    justify-content: space-between;
+    &--registerLink {
+      color: $main-color;
     }
   }
 }
 
-.results__albums {
-    display: inline-block;
-    vertical-align: top;
-    padding-top: 3em; 
-
-}
-.results__albums.selected {
-  .album__list {
-    display: none;
-    &.selectedAlbum {
-      display: inline-block;
-      
-    }
+.home {
+  &__search {
+    margin-bottom: 0.5em;
   }
-}
-
-.results__tracks {
-    display: inline-block;
-    padding-top: 3em; 
-    padding-left: 3em;
 }

@@ -5,8 +5,12 @@ class App extends React.Component {
     homeVisible: false,
     artistVisible: false,
     albumsVisible: false,
+    tracksVisible: false,
+    selectedTrackVisible: false,
     artists: [],
-    albums: []
+    albums: [],
+    tracks: [],
+    selectedTrack: {}
   };
 
   handleLogin = (email, password) => {
@@ -65,12 +69,45 @@ class App extends React.Component {
     } catch (err) {}
   };
 
+  handleSearchTracks = albumsId => {
+    try {
+      logic.retrieveTracks(albumsId, (error, tracks) => {
+        if (error) {
+          console.error;
+        } else {
+          this.setState({
+            albumsVisible: false,
+            tracksVisible: true,
+            tracks
+          });
+        }
+      });
+    } catch (err) {}
+  };
+
+  handleSelectedSearchTrack = trackId => {
+      try {
+          logic.retrieveSelectedTrack(trackId, (error, selectedTrack) => {
+              if(error) {
+                  console.error;
+              } else {
+                  this.setState ({
+                      selectedTrackVisible: true,
+                      selectedTrack
+                  });
+              }
+          })
+      } catch(err) {}
+  }
+
   render() {
     const {
       handleLogin,
       handleLinkLogin,
       handleSearch,
       handleSearchAlbums,
+      handleSearchTracks,
+      handleSelectedSearchTrack,
       state: {
         loginVisible,
         registerVisible,
@@ -78,7 +115,11 @@ class App extends React.Component {
         artistVisible,
         artists,
         albumsVisible,
-        albums
+        albums,
+        tracksVisible,
+        tracks,
+        selectedTrackVisible,
+        selectedTrack
       }
     } = this;
     return (
@@ -91,8 +132,12 @@ class App extends React.Component {
         )}
         {registerVisible && <Register />}
         {homeVisible && <Home onSearch={handleSearch} />}
-        {artistVisible && <Artist artists={artists} onSearchAlbums={handleSearchAlbums} />}
-        {albumsVisible && <Album albums={albums} />}
+        {artistVisible && (
+          <Artist artists={artists} onSearchAlbums={handleSearchAlbums} />
+        )}
+        {albumsVisible && <Album albums={albums} onSearchTracks={handleSearchTracks} />}
+        {tracksVisible && <Track tracks={tracks} onSearchSelectedTrack={handleSelectedSearchTrack}/>}
+        {selectedTrackVisible && <SelectedTrack selectedTrack={selectedTrack} />}
       </div>
     );
   }

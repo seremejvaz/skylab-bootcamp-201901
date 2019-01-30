@@ -1,16 +1,14 @@
 class Artist extends React.Component {
-  state = { name: "", id: "", image: "" };
 
-  handleSearchAlbums = () => {
+  handleSearchAlbums = (query) => {
     const {
-      state: { query },
       props: { onSearchAlbums }
     } = this;
     onSearchAlbums(query);
   };
 
   render() {
-    const {
+    const { handleSearchAlbums,
       props: { artists }
     } = this;
 
@@ -23,10 +21,10 @@ class Artist extends React.Component {
               ? images[0].url
               : "images/spotify.png";
             return (
-              <li
+              <li key={id}
                 data-id={id}
                 className="card__album card bg-light mb"
-                onClick={handleSearchAlbums}
+                onClick={()=> handleSearchAlbums(id)}
               >
                 <img className="card-img" src={imageArtists} />
                 <p className="card-img-overlay">{name}</p>

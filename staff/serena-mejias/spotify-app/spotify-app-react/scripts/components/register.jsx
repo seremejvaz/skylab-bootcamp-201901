@@ -7,7 +7,7 @@ class Register extends React.Component {
     passwordConrfim: ""
   };
 
-  handleName = event => {
+  handleName = event => {handleLinkRegister
     this.setState({ name: event.target.value });
   };
   handleSurname = event => {

@@ -12,16 +12,20 @@ class Home extends React.Component {
 
     render() {
         return (
-        <section>
+            <div className='columns'>
+      <div className='column'>
             <header>
-                <h5>Home</h5>
+                <h3>Home</h3>
             </header>
-            <div>
-                <p>Search</p>
-                <input type="text" name="artist" onChange={this.handleSearchInput} />
-            </div>
-            <button onClick={this.handleSearch}>Search</button>
-        </section>)
+      </div>
+        <section className='home column is-half'>
+                <div className='home__search control'>
+                    <input className='input is-small is-rounded'    type="text" name="artist" onChange={this.handleSearchInput} />
+                </div>
+            <button onClick={this.handleSearch} className='button is-dark is-small is-rounded'>Search</button>
+        </section>
+        <div className='column'></div>
+        </div>)
     }
 
 }
