@@ -1,0 +1,46 @@
+$main-color: rgb(196, 44, 69);
+
+%middle-header {
+  font-size: 2em;
+  padding-bottom: 0.5em;
+}
+
+body {
+  font-family: "Pacifico", cursive;
+  margin: 0;
+  display: inline;
+  h1 {
+    color: $main-color;
+    font-size: 3em;
+    margin-left: 0.5em;
+    margin-bottom: 1em;
+    padding: 0.5em;
+  }
+}
+
+.login {
+  &__buttons {
+    display: flex;
+    justify-content: space-between;
+    &--registerLink {
+      color: $main-color;
+    }
+  }
+  h3 {
+    @extend %middle-header;
+  }
+}
+
+.home {
+  display: flex;
+  align-items: center;
+
+  &__search {
+    margin-bottom: 0.5em;
+  }
+
+  &__header {
+    @extend %middle-header;
+    margin-left: 1.5em;
+  }
+}
