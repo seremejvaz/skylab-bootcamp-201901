@@ -1,9 +1,15 @@
-import spotifyApi from './spotify-api-1.0.0';
-import users from './data';
+import spotifyApi from '../spotify-api';
+import users from '../data';
 
 const logic = {
-    login: function (email, password, callback) {
-        // TODO validate fields!
+    login: function (email, password) {
+        if (typeof email !== 'string') throw TypeError(email + ' is not a string');
+
+        if (!email.trim().length) throw Error('email cannot be empty');
+
+        if (typeof password !== 'string') throw TypeError(password + ' is not a string');
+
+        if (!password.trim().length) throw Error('password cannot be empty');
 
         var user = users.find(function (user) {
             return user.email === email;
@@ -19,8 +25,10 @@ const logic = {
             email: user.email
         };
 
-        callback(loggedInUser);
+        return loggedInUser;
     },
+
+
 
     register: function (name, surname, email, password, passwordConfirmation, callback) {
         if (typeof name !== 'string') throw TypeError(name + ' is not a string');
@@ -65,6 +73,7 @@ const logic = {
 
 
     searchArtists(query, callback) {
+
         if(typeof query !== 'string') throw TypeError (`${query} is not a string`);
 
         if(!query.trim().length) throw Error('query is empty');

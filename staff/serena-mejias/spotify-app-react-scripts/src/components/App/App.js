@@ -7,7 +7,7 @@ import Login from '../Login';
 import Register from '../Register';
 import SelectedTrack from '../SelectedTrack';
 import Track from '../Tracks';
-import logic from '../../logic.js';
+import logic from '../../logic/index';
 
 
 class App extends React.Component {
