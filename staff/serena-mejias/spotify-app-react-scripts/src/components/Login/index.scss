@@ -1,0 +1,18 @@
+@import '../App/App.scss';
+
+.login {
+    margin: 4em;
+
+    &__buttons {
+      display: flex;
+      justify-content: space-between;
+      &--registerLink {
+        color: $main-color;
+      }
+    }
+    h3 {
+      @extend %middle-header;
+    }
+  }
+
+  
