@@ -67,8 +67,11 @@ describe("user api", () => {
     let tokenTest, idTest;
 
     beforeEach(() => {
-      userApi.auth(username, password).then(data => {
-        (tokenTest = data.token), (idTest = data.id);
+      userApi.auth(username, password)
+      .then(data => {
+          console.log(data);
+            tokenTest = data.token;
+            idTest = data.id;
       });
     });
 
