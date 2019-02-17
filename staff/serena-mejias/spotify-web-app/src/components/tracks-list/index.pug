@@ -2,9 +2,9 @@ extends ../layout
 
 block content
     include ../search/index
-        section.tracksList
+        section.tracks-list
              each track in tracks
-                a(href=`/playTrack${track.id}`)
+                a(href=`/play-track&${track.id}`)
                         div
-                            h3 track.name
+                            h3=track.name
         +search 

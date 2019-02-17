@@ -2,11 +2,11 @@ extends ../layout
 
 block content
     include ../search/index
-        section.albumsList
+        section.albums-list
              each album in albums
-                a(href=`/tracks${album.id}`)
+                a(href=`/tracks&${album.id}`)
                         div
                             img(src=`${album.images[0] ? album.images[0].url :  'https://developer.spotify.com/assets/branding-guidelines/icon3@2x.png'}`)
                         div
-                            h3 album.name
+                            h3=album.name
         +search 

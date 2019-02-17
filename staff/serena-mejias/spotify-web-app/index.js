@@ -145,14 +145,12 @@ app.post("/logout", (req, res) => {
   res.redirect("/");
 });
 
-
-
 app.post("/artists", formBodyParser, (req, res) => {
   try {
     spotifyApi
       .searchArtists(req.body.query)
-      .then(artists => { 
-        res.render("artistsList", { artists });
+      .then(artists => {
+        res.render("artists-list", { artists });
       })
       .catch(({ message }) => {
         req.session.feedback = message;
@@ -168,12 +166,14 @@ app.post("/artists", formBodyParser, (req, res) => {
 });
 
 app.get("/albums&:artistId", (req, res) => {
-    const { session: { feedback } } = req;
+  const {
+    session: { feedback }
+  } = req;
   try {
     spotifyApi
       .retrieveAlbums(req.params.artistId)
       .then(albums => {
-        res.render("albumsList", { albums });
+        res.render("albums-list", { albums });
       })
       .catch(({ message }) => {
         req.session.feedback = message;
@@ -189,12 +189,15 @@ app.get("/albums&:artistId", (req, res) => {
 });
 
 app.get("/tracks&:albumId", (req, res) => {
-    const { session: { feedback } } = req;
-  try {
-    spotifyApi
-      .retrieveAlbums(req.params.albumId)
-      .then(tracks => {
-        res.render("tracksList", { tracks });
+    const {
+        session: { feedback }
+    } = req;
+    try {
+        spotifyApi
+        .retrieveTracks(req.params.albumId)
+        .then(tracks => {
+            debugger;
+        res.render("tracks-list", { tracks });
       })
       .catch(({ message }) => {
         req.session.feedback = message;
@@ -209,14 +212,32 @@ app.get("/tracks&:albumId", (req, res) => {
   }
 });
 
-app.get("*", (req, res) =>
-  res.send(
-    404,
-    renderPage(`<section class="not-found">
-          <h2>NOT FOUND</h2>
-  
-          Go <a href="/">Home</a>
-      </section>`)
-  )
-);
+app.get("/play-track&:trackId", (req, res) => {
+    const {
+        session: { feedback }
+    } = req;
+    try {
+        spotifyApi
+        .retrieveTracks(req.params.trackId)
+        .then(track => {
+        res.render("tracks-list", { track });
+      })
+      .catch(({ message }) => {
+        req.session.feedback = message;
+        const feedback = pullFeedback(req);
+
+        res.render("/home", { feedback });
+      });
+  } catch ({ message }) {
+    req.session.feedback = message;
+
+    res.render("home", { feedback: feedback });
+  }
+});
+
+app.get("*", (req, res) => {
+  res.status(404);
+  res.render("not-found");
+});
+
 app.listen(port, () => console.log(`server running on port ${port}`));
