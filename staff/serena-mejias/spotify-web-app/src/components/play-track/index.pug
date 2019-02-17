@@ -2,6 +2,6 @@ extends ../layout
 
 block content
     include ../search/index
-        section.play.track
+        section.play-track
                 h4= track.name
                 audio(src=`${track.preview_url}`, controls) 

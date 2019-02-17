@@ -218,20 +218,16 @@ app.get("/play-track&:trackId", (req, res) => {
     } = req;
     try {
         spotifyApi
-        .retrieveTracks(req.params.trackId)
+        .retrieveTrack(req.params.trackId)
         .then(track => {
         res.render("tracks-list", { track });
       })
       .catch(({ message }) => {
         req.session.feedback = message;
-        const feedback = pullFeedback(req);
-
-        res.render("/home", { feedback });
       });
   } catch ({ message }) {
     req.session.feedback = message;
 
-    res.render("home", { feedback: feedback });
   }
 });
 
