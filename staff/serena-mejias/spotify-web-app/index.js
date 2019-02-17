@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 // const FileStore = require('session-file-store')(session)
 const logicFactory = require("./src/logic-factory");
+const spotifyApi = require("./src/spotify-api");
 
 const {
   env: { PORT },
@@ -103,8 +104,8 @@ app.post("/login", formBodyParser, (req, res) => {
     logic
       .logInUser(email, password)
       .then(() => {
-          res.redirect("/home")
-        })
+        res.redirect("/home");
+      })
       .catch(({ message }) => {
         req.session.feedback = message;
 
@@ -118,26 +119,37 @@ app.post("/login", formBodyParser, (req, res) => {
 });
 
 app.get("/home", (req, res) => {
+  const logic = logicFactory.create(req);
+
+  if (logic.isUserLoggedIn)
+    logic
+      .retrieveUser()
+      .then(user => {
+        return res.render("home", { user });
+      })
+      .catch(({ message }) => {
+        req.session.feedback = message;
+
+        res.redirect("/home");
+      });
+  else {
+    res.redirect("/login");
+  }
+});
+
+app.post("/artist", formBodyParser, (req, res) => {
+    
   try {
-    const {
-      session: { feedback }
-    } = req;
+    spotifyApi
+      .searchArtists(req.body.query)
+      .then((artists) => {
+        res.redirect("/home");
+      })
+      .catch(({ message }) => {
+        req.session.feedback = message;
 
-    const logic = logicFactory.create(req);
-
-    if (logic.isUserLoggedIn)
-      logic
-        .retrieveUser()
-        .then(user => {
-            return res.render("home", {user})
-        })
-        .catch(({ message }) => {
-          req.session.feedback = message;
-
-          res.redirect("/home");
-        });
-    else {
-        res.redirect("/login")};
+        res.redirect("/login");
+      });
   } catch ({ message }) {
     req.session.feedback = message;
 

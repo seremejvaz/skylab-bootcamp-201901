@@ -74,7 +74,7 @@ class Logic {
     });
   }
 
-  /**
+  /**I
    * Checks user is logged in.
    */
   get isUserLoggedIn() {
@@ -205,6 +205,84 @@ class Logic {
 
         throw Error(response.error);
       });
+  }
+
+  /**
+     * Search artists.
+     * 
+     * @param {string} query 
+     * @returns {Promise}
+     */
+    searchArtists(query) {
+      if (typeof query !== 'string') throw TypeError(`${query} is not a string`)
+
+      if (!query.trim().length) throw Error('query is empty')
+
+      return spotifyApi.searchArtists(query)
+  }
+
+  /**
+   * Retrieves an artist.
+   * 
+   * @param {string} artistId 
+   */
+  retrieveArtist(artistId) {
+      if (typeof artistId !== 'string') throw TypeError(`${artistId} is not a string`)
+
+      if (!artistId.trim().length) throw Error('artistId is empty')
+
+      return spotifyApi.retrieveArtist(artistId)
+  }
+
+  /**
+   * Retrieves albums from artist.
+   * 
+   * @param {string} artistId 
+   */
+  retrieveAlbums(artistId) {
+      if (typeof artistId !== 'string') throw TypeError(`${artistId} is not a string`)
+
+      if (!artistId.trim().length) throw Error('artistId is empty')
+
+      return spotifyApi.retrieveAlbums(artistId)
+  }
+
+  /**
+   * Retrieves an album.
+   * 
+   * @param {string} albumId 
+   */
+  retrieveAlbum(albumId) {
+      if (typeof albumId !== 'string') throw TypeError(`${albumId} is not a string`)
+
+      if (!albumId.trim().length) throw Error('albumId is empty')
+
+      return spotifyApi.retrieveAlbum(albumId)
+  }
+  /**
+   * Retrieves tracks from album.
+   * 
+   * @param {string} albumId 
+   */
+  retrieveTracks(albumId) {
+      if (typeof albumId !== 'string') throw TypeError(`${albumId} is not a string`)
+
+      if (!albumId.trim().length) throw Error('albumId is empty')
+
+      return spotifyApi.retrieveTracks(albumId)
+  }
+
+  /**
+   * Retrieves track.
+   * 
+   * @param {string} trackId 
+   */
+  retrieveTrack(trackId) {
+      if (typeof trackId !== 'string') throw TypeError(`${trackId} is not a string`)
+
+      if (!trackId.trim().length) throw Error('trackId is empty')
+
+      return spotifyApi.retrieveTrack(trackId)
   }
 }
 

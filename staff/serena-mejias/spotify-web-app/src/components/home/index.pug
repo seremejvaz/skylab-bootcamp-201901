@@ -1,13 +1,9 @@
 extends ../layout
 
-include ../feedback/index
-
 block content
+  include ../search/index
+
     section.home
-      | Welcome, ${user.name}!
-      | ${feedback ? `
-      section.feedback.feedback--error
-        | ${feedback}
-      | ` : ''}
       form(action='/logout', method='post')
         button(type='submit') Logout
+    +search
