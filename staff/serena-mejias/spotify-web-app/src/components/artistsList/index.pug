@@ -1,0 +1,12 @@
+extends ../layout
+
+block content
+    include ../search/index
+        section.artistsList
+             each artist in artists
+                a(href=`/albums&${artist.id}`)
+                        div
+                            img(src=`${artist.images[0] ? artist.images[0].url :  'https://developer.spotify.com/assets/branding-guidelines/icon3@2x.png'}`)
+                        div
+                            h3 artist.name
+        +search 

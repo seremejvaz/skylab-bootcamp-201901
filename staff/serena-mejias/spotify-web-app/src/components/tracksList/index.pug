@@ -1,0 +1,10 @@
+extends ../layout
+
+block content
+    include ../search/index
+        section.tracksList
+             each track in tracks
+                a(href=`/playTrack${track.id}`)
+                        div
+                            h3 track.name
+        +search 

@@ -21,7 +21,6 @@ const spotifyApi = {
      * @throws {Error} - On empty parameters value.
      */
     searchArtists(query) {
-        debugger
         if (typeof query !== 'string') throw TypeError(`${query} is not a string`)
 
         if (!query.trim().length) throw Error('query is empty')
@@ -35,9 +34,9 @@ const spotifyApi = {
             .then(response => {
                 if (response.error) throw Error(response.error.message)
 
-                const { artists: { items } } = response
-                if (!items.length) throw Error('No matching Artists')  
-                else return items
+                //const { artists: { items } } = response
+                if (!response.artists.items.length) throw Error('No matching Artists')  
+                else return response.artists.items
             })
     },
 

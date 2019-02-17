@@ -137,26 +137,6 @@ app.get("/home", (req, res) => {
   }
 });
 
-app.post("/artist", formBodyParser, (req, res) => {
-    
-  try {
-    spotifyApi
-      .searchArtists(req.body.query)
-      .then((artists) => {
-        res.redirect("/home");
-      })
-      .catch(({ message }) => {
-        req.session.feedback = message;
-
-        res.redirect("/login");
-      });
-  } catch ({ message }) {
-    req.session.feedback = message;
-
-    res.redirect("/login");
-  }
-});
-
 app.post("/logout", (req, res) => {
   const logic = logicFactory.create(req);
 
@@ -165,15 +145,78 @@ app.post("/logout", (req, res) => {
   res.redirect("/");
 });
 
+
+
+app.post("/artists", formBodyParser, (req, res) => {
+  try {
+    spotifyApi
+      .searchArtists(req.body.query)
+      .then(artists => { 
+        res.render("artistsList", { artists });
+      })
+      .catch(({ message }) => {
+        req.session.feedback = message;
+        const feedback = pullFeedback(req);
+
+        res.render("/home", { feedback });
+      });
+  } catch ({ message }) {
+    req.session.feedback = message;
+
+    res.render("home", { feedback });
+  }
+});
+
+app.get("/albums&:artistId", (req, res) => {
+    const { session: { feedback } } = req;
+  try {
+    spotifyApi
+      .retrieveAlbums(req.params.artistId)
+      .then(albums => {
+        res.render("albumsList", { albums });
+      })
+      .catch(({ message }) => {
+        req.session.feedback = message;
+        const feedback = pullFeedback(req);
+
+        res.render("/home", { feedback });
+      });
+  } catch ({ message }) {
+    req.session.feedback = message;
+
+    res.render("home", { feedback: feedback });
+  }
+});
+
+app.get("/tracks&:albumId", (req, res) => {
+    const { session: { feedback } } = req;
+  try {
+    spotifyApi
+      .retrieveAlbums(req.params.albumId)
+      .then(tracks => {
+        res.render("tracksList", { tracks });
+      })
+      .catch(({ message }) => {
+        req.session.feedback = message;
+        const feedback = pullFeedback(req);
+
+        res.render("/home", { feedback });
+      });
+  } catch ({ message }) {
+    req.session.feedback = message;
+
+    res.render("home", { feedback: feedback });
+  }
+});
+
 app.get("*", (req, res) =>
   res.send(
     404,
     renderPage(`<section class="not-found">
-        <h2>NOT FOUND</h2>
-
-        Go <a href="/">Home</a>
-    </section>`)
+          <h2>NOT FOUND</h2>
+  
+          Go <a href="/">Home</a>
+      </section>`)
   )
 );
-
 app.listen(port, () => console.log(`server running on port ${port}`));
