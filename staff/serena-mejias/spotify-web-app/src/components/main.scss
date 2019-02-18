@@ -1,0 +1,10 @@
+@import 'panel';
+
+.main {
+    @extend %panel;
+}
+
+%middle__header {
+    font-size: 1em;
+    padding: 0.5em 0em;
+}

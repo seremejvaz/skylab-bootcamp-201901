@@ -1,36 +1,73 @@
-.main, .feedback, .landing, .home, .login, .register {
-  border: 1px solid black;
-  border-radius: 1em;
-  padding: 1em;
-  margin: 1em;
+@import url("https://fonts.googleapis.com/css?family=Pacifico");
+.main, .feedback, .home, .login, .register {
+  font-family: "Pacifico", cursive;
+  margin: 0;
+  display: inline;
+  color: black;
+}
+.main h1, .feedback h1, .home h1, .login h1, .register h1 {
+  color: #c42c45;
+  font-size: 2em;
+  padding: 0.5em 1em;
+  background-color: #dedede;
 }
 
-.main, .feedback, .landing, .home, .login, .register {
-  border: 1px solid black;
-  border-radius: 1em;
-  padding: 1em;
-  margin: 1em;
+.main, .feedback, .home, .login, .register {
+  font-family: "Pacifico", cursive;
+  margin: 0;
+  display: inline;
+  color: black;
+}
+.main h1, .feedback h1, .home h1, .login h1, .register h1 {
+  color: #c42c45;
+  font-size: 2em;
+  padding: 0.5em 1em;
+  background-color: #dedede;
 }
 
-.main, .feedback, .landing, .home, .register, .login {
-  border: 1px solid black;
-  border-radius: 1em;
-  padding: 1em;
-  margin: 1em;
+.main, .feedback, .home, .register, .login {
+  font-family: "Pacifico", cursive;
+  margin: 0;
+  display: inline;
+  color: black;
+}
+.main h1, .feedback h1, .home h1, .register h1, .login h1 {
+  color: #c42c45;
+  font-size: 2em;
+  padding: 0.5em 1em;
+  background-color: #dedede;
 }
 
-.main, .feedback, .landing, .register, .login, .home {
-  border: 1px solid black;
-  border-radius: 1em;
-  padding: 1em;
-  margin: 1em;
+.main, .feedback, .register, .login, .home {
+  font-family: "Pacifico", cursive;
+  margin: 0;
+  display: inline;
+  color: black;
+}
+.main h1, .feedback h1, .register h1, .login h1, .home h1 {
+  color: #c42c45;
+  font-size: 2em;
+  padding: 0.5em 1em;
+  background-color: #dedede;
 }
 
-.main, .feedback, .register, .login, .home, .landing {
-  border: 1px solid black;
-  border-radius: 1em;
-  padding: 1em;
-  margin: 1em;
+.links {
+  font-size: 1.5em;
+  color: black;
+  padding: 4em;
+}
+
+.main, .feedback, .register, .login, .home {
+  font-family: "Pacifico", cursive;
+  margin: 0;
+  display: inline;
+  color: black;
+}
+.main h1, .feedback h1, .register h1, .login h1, .home h1 {
+  color: #c42c45;
+  font-size: 2em;
+  padding: 0.5em 1em;
+  background-color: #dedede;
 }
 
 .feedback {
@@ -43,11 +80,22 @@
   background-color: tomato;
 }
 
-.main, .register, .login, .home, .landing, .feedback {
-  border: 1px solid black;
-  border-radius: 1em;
-  padding: 1em;
-  margin: 1em;
+.main, .register, .login, .home, .feedback {
+  font-family: "Pacifico", cursive;
+  margin: 0;
+  display: inline;
+  color: black;
+}
+.main h1, .register h1, .login h1, .home h1, .feedback h1 {
+  color: #c42c45;
+  font-size: 2em;
+  padding: 0.5em 1em;
+  background-color: #dedede;
+}
+
+.middle__header {
+  font-size: 1em;
+  padding: 0.5em 0em;
 }
 
 /*# sourceMappingURL=style.css.map */

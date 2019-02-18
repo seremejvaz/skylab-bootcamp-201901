@@ -1,0 +1,10 @@
+@import '../panel';
+@import '../main.scss';
+
+.login {
+    @extend %panel;
+}
+
+.middle__header {
+    @extend %middle__header
+}

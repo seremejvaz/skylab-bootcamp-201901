@@ -196,7 +196,6 @@ app.get("/tracks&:albumId", (req, res) => {
         spotifyApi
         .retrieveTracks(req.params.albumId)
         .then(tracks => {
-            debugger;
         res.render("tracks-list", { tracks });
       })
       .catch(({ message }) => {
@@ -213,12 +212,10 @@ app.get("/tracks&:albumId", (req, res) => {
 });
 
 app.get("/play-track&:trackId", (req, res) => {
-    debugger
     const {
         session: { feedback }
     } = req;
     try {
-        debugger
         spotifyApi
         .retrieveTrack(req.params.trackId)
         .then(track => {

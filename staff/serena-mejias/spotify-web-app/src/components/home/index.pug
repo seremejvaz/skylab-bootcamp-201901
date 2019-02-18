@@ -2,7 +2,7 @@ extends ../layout
 
 block content
   include ../search/index
+    +search
     section.home
       form(action='/logout', method='post')
         button(type='submit') Logout
-    +search

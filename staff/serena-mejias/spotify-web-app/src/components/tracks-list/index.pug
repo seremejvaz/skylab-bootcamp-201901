@@ -3,6 +3,7 @@ extends ../layout
 block content
     include ../search/index
         section.tracks-list
+            h1 Spotify web App
              each track in tracks
                 a(href=`/play-track&${track.id}`)
                         div

@@ -2,6 +2,9 @@ extends ../layout
 
 block content
     section.landing
-      a(href='/login') Login
-      |  or 
-      a(href='/register') Register
+      h1 Spotify web App
+      div(class='links columns')
+        section(class='login column is-half is-offset-one-quarter')
+          a(href='/login') Login
+          |  or 
+          a(href='/register') Register

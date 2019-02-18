@@ -10,7 +10,7 @@
     "test": "mocha src/**/*.spec.js",
     "test-debug": "mocha debug src/**/*.spec.js",
     "test-coverage": "nyc --reporter=html --reporter=text mocha src/**/*.spec.js",
-    "styles": "sass --watch src/index.sass:public/style.css"
+    "styles": "sass --watch src/index.scss:public/style.css"
   },
   "keywords": [],
   "author": "",
