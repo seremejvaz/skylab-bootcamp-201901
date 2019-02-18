@@ -156,7 +156,7 @@ app.post("/artists", formBodyParser, (req, res) => {
         req.session.feedback = message;
         const feedback = pullFeedback(req);
 
-        res.render("/home", { feedback });
+        res.render("home", { feedback });
       });
   } catch ({ message }) {
     req.session.feedback = message;
@@ -179,12 +179,12 @@ app.get("/albums&:artistId", (req, res) => {
         req.session.feedback = message;
         const feedback = pullFeedback(req);
 
-        res.render("/home", { feedback });
+        res.render("home", { feedback });
       });
   } catch ({ message }) {
     req.session.feedback = message;
 
-    res.render("home", { feedback: feedback });
+    res.render("home", { feedback });
   }
 });
 
@@ -203,24 +203,26 @@ app.get("/tracks&:albumId", (req, res) => {
         req.session.feedback = message;
         const feedback = pullFeedback(req);
 
-        res.render("/home", { feedback });
+        res.render("home", { feedback });
       });
   } catch ({ message }) {
     req.session.feedback = message;
 
-    res.render("home", { feedback: feedback });
+    res.render("home", { feedback });
   }
 });
 
 app.get("/play-track&:trackId", (req, res) => {
+    debugger
     const {
         session: { feedback }
     } = req;
     try {
+        debugger
         spotifyApi
         .retrieveTrack(req.params.trackId)
         .then(track => {
-        res.render("tracks-list", { track });
+        res.render("play-track", { track } );
       })
       .catch(({ message }) => {
         req.session.feedback = message;
