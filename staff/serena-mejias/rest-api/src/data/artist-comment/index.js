@@ -3,6 +3,9 @@ const fs = require("fs");
 const path = require("path");
 
 const artistComment = {
+
+  file: 'artist-comments.json',
+
   add(comment) {
     const id = uuid();
     comment.id = id;
@@ -36,9 +39,11 @@ const artistComment = {
         if (err) {
           reject(err);
         } else {
-          obj = JSON.parse(data);
-          obj = obj.find(com => com.id === id);
-          obj = obj? obj : null
+          let array = JSON.parse(data);
+          let obj = array.find(com => com.id === id);
+          obj = obj ? obj : null;
+          obj.date = new Date(obj.date)
+
           resolve(obj);
         }
       })
@@ -56,7 +61,7 @@ const artistComment = {
           let array = JSON.parse(data);
           let obj = array.find(com => com.id === comment.id);
           const commentIndex = array.indexOf(obj);
-          array.splice(commentIndex, 1, comment)
+          array.splice(commentIndex, 1, comment);
           updateComments = JSON.stringify(array);
 
           fs.writeFile(file, updateComments, err => {
@@ -69,18 +74,20 @@ const artistComment = {
   },
 
   delete(id) {
-    
     const file = path.join(__dirname, "artist-comments.json");
 
     return new Promise((resolve, reject) =>
       fs.readFile(file, "utf8", (err, data) => {
+          debugger
         if (err) {
           reject(err);
         } else {
+            debugger
           let array = JSON.parse(data);
           let obj = array.find(com => com.id === id);
           const commentIndex = array.indexOf(obj);
-          array.splice(commentIndex, 1)
+          array.splice(commentIndex, 1);
+          obj.date = new Date(obj.date)
           updateComments = JSON.stringify(array);
 
           fs.writeFile(file, updateComments, err => {
@@ -93,10 +100,20 @@ const artistComment = {
   },
 
   find(id) {
-      
+    const file = path.join(__dirname, "artist-comments.json");
+
+    return new Promise((resolve, reject) =>
+      fs.readFile(file, "utf8", (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          let array = JSON.parse(data);
+          let obj = array.find(com => com.id === id);
+          resolve(obj);
+        }
+      })
+    );
   }
-
-
 };
 
 module.exports = artistComment;
