@@ -1,119 +1,125 @@
-const uuid = require("uuid/v4");
-const fs = require("fs");
-const path = require("path");
+const uuid = require('uuid/v4')
+const fsp = require('fs').promises // WARN need node v10+
+const path = require('path')
 
 const artistComment = {
+    file: 'artist-comments.json',
 
-  file: 'artist-comments.json',
+    __load__(file) {
+        return fsp.readFile(file)
+            .then(content => JSON.parse(content))
+    },
 
-  add(comment) {
-    const id = uuid();
-    comment.id = id;
+    __save__(file, comments) {
+        return fsp.writeFile(file, JSON.stringify(comments, null, 4))
+    },
 
-    const file = path.join(__dirname, "artist-comments.json");
+    add(comment) {
+        debugger
+        if (typeof comment !== "object")
+            throw TypeError(`${comment} is not an object`);
 
-    return new Promise((resolve, reject) =>
-      fs.readFile(file, "utf8", (err, data) => {
-        if (err) {
-          reject(err);
-        } else {
-          data = JSON.parse(data);
-          data.push(comment);
-          const json = JSON.stringify(data);
-          fs.writeFile(file, json, err => {
-            if (err) {
-              reject(err);
-            }
-          });
-        }
-        resolve(comment.id);
-      })
-    );
-  },
+        if (comment === undefined) throw Error("comment is empty");
 
-  retrieve(id) {
-    const file = path.join(__dirname, "artist-comments.json");
+        if (comment.id !== "string") throw TypeError(`${comment.id} is not an string`);
 
-    return new Promise((resolve, reject) =>
-      fs.readFile(file, "utf8", (err, data) => {
-        if (err) {
-          reject(err);
-        } else {
-          let array = JSON.parse(data);
-          let obj = array.find(com => com.id === id);
-          obj = obj ? obj : null;
-          obj.date = new Date(obj.date)
+        const file = path.join(__dirname, this.file)
 
-          resolve(obj);
-        }
-      })
-    );
-  },
+        return this.__load__(file)
+            .then(comments => {
+                comment.id = uuid()
 
-  update(comment) {
-    const file = path.join(__dirname, "artist-comments.json");
+                comments.push(comment)
 
-    return new Promise((resolve, reject) =>
-      fs.readFile(file, "utf8", (err, data) => {
-        if (err) {
-          reject(err);
-        } else {
-          let array = JSON.parse(data);
-          let obj = array.find(com => com.id === comment.id);
-          const commentIndex = array.indexOf(obj);
-          array.splice(commentIndex, 1, comment);
-          updateComments = JSON.stringify(array);
+                return this.__save__(file, comments)
+            })
+    },
 
-          fs.writeFile(file, updateComments, err => {
-            if (err) reject(err);
-          });
-          resolve(obj);
-        }
-      })
-    );
-  },
+    retrieve(id) {
+        if (typeof id !== "string")
+            throw TypeError(`${id} is not a string`);
 
-  delete(id) {
-    const file = path.join(__dirname, "artist-comments.json");
+        if (!id.trim().length) throw Error("id is empty");
 
-    return new Promise((resolve, reject) =>
-      fs.readFile(file, "utf8", (err, data) => {
-          debugger
-        if (err) {
-          reject(err);
-        } else {
-            debugger
-          let array = JSON.parse(data);
-          let obj = array.find(com => com.id === id);
-          const commentIndex = array.indexOf(obj);
-          array.splice(commentIndex, 1);
-          obj.date = new Date(obj.date)
-          updateComments = JSON.stringify(array);
+        const file = path.join(__dirname, this.file)
 
-          fs.writeFile(file, updateComments, err => {
-            if (err) reject(err);
-          });
-          resolve(obj);
-        }
-      })
-    );
-  },
+        return this.__load__(file)
+            .then(comments => {
+                const comment = comments.find(comment => comment.id === id)
 
-  find(id) {
-    const file = path.join(__dirname, "artist-comments.json");
+                if (typeof comment === 'undefined') return null
 
-    return new Promise((resolve, reject) =>
-      fs.readFile(file, "utf8", (err, data) => {
-        if (err) {
-          reject(err);
-        } else {
-          let array = JSON.parse(data);
-          let obj = array.find(com => com.id === id);
-          resolve(obj);
-        }
-      })
-    );
-  }
-};
+                comment.date = new Date(comment.date)
 
-module.exports = artistComment;
+                return comment
+            })
+    },
+
+    update(comment) {
+        if (typeof comment !== "object")
+            throw TypeError(`${comment} is not an object`);
+
+        if (comment === undefined) throw Error("comment is empty");
+
+        const file = path.join(__dirname, this.file)
+
+        return this.__load__(file)
+            .then(comments => {
+                const index = comments.findIndex(_comment => _comment.id === comment.id)
+
+                if (index < 0) throw Error(`comment with id ${comment.id} not found`)
+
+                comments[index] = comment
+
+                return this.__save__(file, comments)
+            })
+    },
+
+    remove(id) {
+        if (typeof id !== "string")
+            throw TypeError(`${id} is not a string`);
+
+        if (!id.trim().length) throw Error("id is empty");
+
+        const file = path.join(__dirname, this.file)
+
+        return this.__load__(file)
+            .then(comments => {
+                const index = comments.findIndex(comment => comment.id === id)
+
+                if (index < 0) throw Error(`comment with id ${id} not found`)
+
+                comments.splice(index, 1)
+
+                return this.__save__(file, comments)
+            })
+    },
+
+    removeAll() {
+        const file = path.join(__dirname, this.file)
+        
+        return this.__save__(file, [])
+    },
+
+    find(criteria) {
+        // TODO validate criteria
+
+        const file = path.join(__dirname, this.file)
+
+        return this.__load__(file)
+            .then(comments => {
+                const filtered = comments.filter(comment => {
+                    for (const key in criteria)
+                        if (comment[key] !== criteria[key]) return false
+
+                    return true
+                })
+
+                filtered.forEach(comment => comment.date = new Date(comment.date))
+
+                return filtered
+            })
+    }
+}
+
+module.exports = artistComment

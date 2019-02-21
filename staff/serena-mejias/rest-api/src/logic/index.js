@@ -1,217 +1,264 @@
-'use strict'
+"use strict";
 
-const spotifyApi = require('../spotify-api')
-const userApi = require('../user-api')
+const spotifyApi = require("../spotify-api");
+const userApi = require("../user-api");
+const artistComment = require("../data/artist-comment");
 
 /**
  * Abstraction of business logic.
  */
 const logic = {
-    /**
-    * Registers a user.
-    * 
-    * @param {string} name 
-    * @param {string} surname 
-    * @param {string} email 
-    * @param {string} password 
-    * @param {string} passwordConfirmation 
-    */
-    registerUser(name, surname, email, password, passwordConfirmation) {
-        
-        if (typeof name !== 'string') throw TypeError(name + ' is not a string')
+  /**
+   * Registers a user.
+   *
+   * @param {string} name
+   * @param {string} surname
+   * @param {string} email
+   * @param {string} password
+   * @param {string} passwordConfirmation
+   */
+  registerUser(name, surname, email, password, passwordConfirmation) {
+    if (typeof name !== "string") throw TypeError(name + " is not a string");
 
-        if (!name.trim().length) throw Error('name cannot be empty')
+    if (!name.trim().length) throw Error("name cannot be empty");
 
-        if (typeof surname !== 'string') throw TypeError(surname + ' is not a string')
+    if (typeof surname !== "string")
+      throw TypeError(surname + " is not a string");
 
-        if (!surname.trim().length) throw Error('surname cannot be empty')
+    if (!surname.trim().length) throw Error("surname cannot be empty");
 
-        if (typeof email !== 'string') throw TypeError(email + ' is not a string')
+    if (typeof email !== "string") throw TypeError(email + " is not a string");
 
-        if (!email.trim().length) throw Error('email cannot be empty')
+    if (!email.trim().length) throw Error("email cannot be empty");
 
-        if (typeof password !== 'string') throw TypeError(password + ' is not a string')
+    if (typeof password !== "string")
+      throw TypeError(password + " is not a string");
 
-        if (!password.trim().length) throw Error('password cannot be empty')
+    if (!password.trim().length) throw Error("password cannot be empty");
 
-        if (typeof passwordConfirmation !== 'string') throw TypeError(passwordConfirmation + ' is not a string')
+    if (typeof passwordConfirmation !== "string")
+      throw TypeError(passwordConfirmation + " is not a string");
 
-        if (!passwordConfirmation.trim().length) throw Error('password confirmation cannot be empty')
+    if (!passwordConfirmation.trim().length)
+      throw Error("password confirmation cannot be empty");
 
-        if (password !== passwordConfirmation) throw Error('passwords do not match')
+    if (password !== passwordConfirmation)
+      throw Error("passwords do not match");
 
-        return userApi.register(name, surname, email, password)
-    },
+    return userApi.register(name, surname, email, password);
+  },
 
-    /**
-     * Authenticates user by its credentials.
-     * 
-     * @param {string} email 
-     * @param {string} password 
-     */
-    authenticateUser(email, password) {
-        debugger
-        if (typeof email !== 'string') throw TypeError(email + ' is not a string')
+  /**
+   * Authenticates user by its credentials.
+   *
+   * @param {string} email
+   * @param {string} password
+   */
+  authenticateUser(email, password) {
+    if (typeof email !== "string") throw TypeError(email + " is not a string");
 
-        if (!email.trim().length) throw Error('email cannot be empty')
+    if (!email.trim().length) throw Error("email cannot be empty");
 
-        if (typeof password !== 'string') throw TypeError(password + ' is not a string')
+    if (typeof password !== "string")
+      throw TypeError(password + " is not a string");
 
-        if (!password.trim().length) throw Error('password cannot be empty')
+    if (!password.trim().length) throw Error("password cannot be empty");
 
-        return userApi.authenticate(email, password)
-    },
+    return userApi.authenticate(email, password);
+  },
 
-    retrieveUser(userId, token) {
-        return userApi.retrieve(userId, token)
-            .then(({ id, name, surname, username: email, favoriteArtists = [], favoriteAlbums = [], favoriteTracks = [] }) => ({
-                id,
-                name,
-                surname,
-                email,
-                favoriteArtists,
-                favoriteAlbums,
-                favoriteTracks
-            }))
-    },
+  retrieveUser(userId, token) {
+    return userApi
+      .retrieve(userId, token)
+      .then(
+        ({
+          id,
+          name,
+          surname,
+          username: email,
+          favoriteArtists = [],
+          favoriteAlbums = [],
+          favoriteTracks = []
+        }) => ({
+          id,
+          name,
+          surname,
+          email,
+          favoriteArtists,
+          favoriteAlbums,
+          favoriteTracks
+        })
+      );
+  },
 
-    // TODO updateUser and removeUser
+  // TODO updateUser and removeUser
 
-    /**
-     * Search artists.
-     * 
-     * @param {string} query 
-     * @returns {Promise}
-     */
-    searchArtists(query) {
-        if (typeof query !== 'string') throw TypeError(`${query} is not a string`)
+  /**
+   * Search artists.
+   *
+   * @param {string} query
+   * @returns {Promise}
+   */
+  searchArtists(query) {
+    if (typeof query !== "string") throw TypeError(`${query} is not a string`);
 
-        if (!query.trim().length) throw Error('query is empty')
+    if (!query.trim().length) throw Error("query is empty");
 
-        return spotifyApi.searchArtists(query)
-    },
+    return spotifyApi.searchArtists(query);
+  },
 
-    /**
-     * Retrieves an artist.
-     * 
-     * @param {string} artistId 
-     */
-    retrieveArtist(artistId) {
-        if (typeof artistId !== 'string') throw TypeError(`${artistId} is not a string`)
+  /**
+   * Retrieves an artist.
+   *
+   * @param {string} artistId
+   */
+  retrieveArtist(artistId) {
+    if (typeof artistId !== "string")
+      throw TypeError(`${artistId} is not a string`);
 
-        if (!artistId.trim().length) throw Error('artistId is empty')
+    if (!artistId.trim().length) throw Error("artistId is empty");
 
-        return spotifyApi.retrieveArtist(artistId)
-    },
+    return spotifyApi.retrieveArtist(artistId);
+    // TODO once artistComment is already implemented
+    // .then(artist =>
+    //     artistComment.find({ artistId: artist.id })
+    //         .then(comments => artist.comments = comments)
+    //         .then(() => artist)
+    // )
+  },
 
-    /**
-     * Toggles a artist from non-favorite to favorite, and viceversa.
-     * 
-     * @param {string} artistId - The id of the artist to toggle in favorites.
-     */
-    toggleFavoriteArtist(userId, token, artistId) {
-        return userApi.retrieve(userId, token)
-            .then(user => {
-                const { favoriteArtists = [] } = user
+  /**
+   * Toggles a artist from non-favorite to favorite, and viceversa.
+   *
+   * @param {string} artistId - The id of the artist to toggle in favorites.
+   */
+  toggleFavoriteArtist(userId, token, artistId) {
+    return userApi.retrieve(userId, token).then(user => {
+      const { favoriteArtists = [] } = user;
 
-                const index = favoriteArtists.findIndex(_artistId => _artistId === artistId)
+      const index = favoriteArtists.findIndex(
+        _artistId => _artistId === artistId
+      );
 
-                if (index < 0) favoriteArtists.push(artistId)
-                else favoriteArtists.splice(index, 1)
+      if (index < 0) favoriteArtists.push(artistId);
+      else favoriteArtists.splice(index, 1);
 
-                return userApi.update(userId, token, { favoriteArtists })
-            })
-    },
+      return userApi.update(userId, token, { favoriteArtists });
+    });
+  },
 
-    /**
-     * Retrieves albums from artist.
-     * 
-     * @param {string} artistId 
-     */
-    retrieveAlbums(artistId) {
-        if (typeof artistId !== 'string') throw TypeError(`${artistId} is not a string`)
+  addCommentToArtist(userId, token, artistId, text) {
+    // TODO validate userId, token, artistId and text
 
-        if (!artistId.trim().length) throw Error('artistId is empty')
+    const comment = {
+      userId,
+      artistId,
+      text
+    };
 
-        return spotifyApi.retrieveAlbums(artistId)
-    },
+    return userApi
+      .retrieve(userId, token)
+      .then(() => artistComment.add(comment))
+      .then(() => comment.id);
+  },
 
-    /**
-     * Retrieves an album.
-     * 
-     * @param {string} albumId 
-     */
-    retrieveAlbum(albumId) {
-        if (typeof albumId !== 'string') throw TypeError(`${albumId} is not a string`)
+  listCommentsFromArtist(artistId) {
+    // TODO artistId
 
-        if (!albumId.trim().length) throw Error('albumId is empty')
+    return artistComment.find({ artistId });
+  },
 
-        return spotifyApi.retrieveAlbum(albumId)
-    },
+  /**
+   * Retrieves albums from artist.
+   *
+   * @param {string} artistId
+   */
+  retrieveAlbums(artistId) {
+    if (typeof artistId !== "string")
+      throw TypeError(`${artistId} is not a string`);
 
-    /**
-     * Toggles a album from non-favorite to favorite, and viceversa.
-     * 
-     * @param {string} albumId - The id of the album to toggle in favorites.
-     */
-    toggleFavoriteAlbum(userId, token, albumId) {
-        return userApi.retrieve(userId, token)
-            .then(user => {
-                const { favoriteAlbums = [] } = user
+    if (!artistId.trim().length) throw Error("artistId is empty");
 
-                const index = favoriteAlbums.findIndex(_albumId => _albumId === albumId)
+    return spotifyApi.retrieveAlbums(artistId);
+  },
 
-                if (index < 0) favoriteAlbums.push(albumId)
-                else favoriteAlbums.splice(index, 1)
+  /**
+   * Retrieves an album.
+   *
+   * @param {string} albumId
+   */
+  retrieveAlbum(albumId) {
+    if (typeof albumId !== "string")
+      throw TypeError(`${albumId} is not a string`);
 
-                return userApi.update(userId, token, { favoriteAlbums })
-            })
-    },
+    if (!albumId.trim().length) throw Error("albumId is empty");
 
-    /**
-     * Retrieves tracks from album.
-     * 
-     * @param {string} albumId 
-     */
-    retrieveTracks(albumId) {
-        if (typeof albumId !== 'string') throw TypeError(`${albumId} is not a string`)
+    return spotifyApi.retrieveAlbum(albumId);
+  },
 
-        if (!albumId.trim().length) throw Error('albumId is empty')
+  /**
+   * Toggles a album from non-favorite to favorite, and viceversa.
+   *
+   * @param {string} albumId - The id of the album to toggle in favorites.
+   */
+  toggleFavoriteAlbum(userId, token, albumId) {
+    return userApi.retrieve(userId, token).then(user => {
+      const { favoriteAlbums = [] } = user;
 
-        return spotifyApi.retrieveTracks(albumId)
-    },
+      const index = favoriteAlbums.findIndex(_albumId => _albumId === albumId);
 
-    /**
-     * Retrieves track.
-     * 
-     * @param {string} trackId 
-     */
-    retrieveTrack(trackId) {
-        if (typeof trackId !== 'string') throw TypeError(`${trackId} is not a string`)
+      if (index < 0) favoriteAlbums.push(albumId);
+      else favoriteAlbums.splice(index, 1);
 
-        if (!trackId.trim().length) throw Error('trackId is empty')
+      return userApi.update(userId, token, { favoriteAlbums });
+    });
+  },
 
-        return spotifyApi.retrieveTrack(trackId)
-    },
+  /**
+   * Retrieves tracks from album.
+   *
+   * @param {string} albumId
+   */
+  retrieveTracks(albumId) {
+    if (typeof albumId !== "string")
+      throw TypeError(`${albumId} is not a string`);
 
-    /**
-     * Toggles a track from non-favorite to favorite, and viceversa.
-     * 
-     * @param {string} trackId - The id of the track to toggle in favorites.
-     */
-    toggleFavoriteTrack(userId, token, trackId) {
-        return userApi.retrieve(userId, token)
-            .then(user => {
-                const { favoriteTracks = [] } = user
+    if (!albumId.trim().length) throw Error("albumId is empty");
 
-                const index = favoriteTracks.findIndex(_trackId => _trackId === trackId)
+    return spotifyApi.retrieveTracks(albumId);
+  },
 
-                if (index < 0) favoriteTracks.push(trackId)
-                else favoriteTracks.splice(index, 1)
+  /**
+   * Retrieves track.
+   *
+   * @param {string} trackId
+   */
+  retrieveTrack(trackId) {
+    if (typeof trackId !== "string")
+      throw TypeError(`${trackId} is not a string`);
 
-                return userApi.update(userId, token, { favoriteTracks })
-            })
-    }
-}
+    if (!trackId.trim().length) throw Error("trackId is empty");
 
-module.exports = logic
+    return spotifyApi.retrieveTrack(trackId);
+  },
+
+  /**
+   * Toggles a track from non-favorite to favorite, and viceversa.
+   *
+   * @param {string} trackId - The id of the track to toggle in favorites.
+   */
+  toggleFavoriteTrack(userId, token, trackId) {
+    return userApi.retrieve(userId, token).then(user => {
+      const { favoriteTracks = [] } = user;
+
+      const index = favoriteTracks.findIndex(_trackId => _trackId === trackId);
+
+      if (index < 0) favoriteTracks.push(trackId);
+      else favoriteTracks.splice(index, 1);
+
+      return userApi.update(userId, token, { favoriteTracks });
+    });
+  }
+};
+
+module.exports = logic;
