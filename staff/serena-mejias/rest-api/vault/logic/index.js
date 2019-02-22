@@ -1,14 +1,9 @@
 "use strict";
 
-require('dotenv').config()
-
 const spotifyApi = require("../spotify-api");
 const userApi = require("../user-api");
-const users = require("../data/users");
-const artistComments = require("../data/artist-comments");
-const jwt = require('jsonwebtoken');
+const artistComment = require("../data/artist-comment");
 
-const { env: { SECRET } } = process
 /**
  * Abstraction of business logic.
  */
@@ -50,8 +45,7 @@ const logic = {
     if (password !== passwordConfirmation)
       throw Error("passwords do not match");
 
-    // return userApi.register(name, surname, email, password)
-    return users.add({ name, surname, email, password });
+    return userApi.register(name, surname, email, password);
   },
 
   /**
@@ -70,53 +64,31 @@ const logic = {
 
     if (!password.trim().length) throw Error("password cannot be empty");
 
-    return users.findByEmail(email).then(user => {
-      if (!user) throw Error(`user with email ${email} not found`);
-      if (user.password !== password) throw Error("wrong credentials");
-      
-      if (user && password) {
-        let user_Id = { id: user.id };
-
-        let secret = SECRET;
-
-        let exp = { expiresIn: '24h' };
-
-        let token = jwt.sign(user_Id, secret, exp);
-        
-        return {id: user.id, token};
-      }
-    });
+    return userApi.authenticate(email, password);
   },
 
   retrieveUser(userId, token) {
-      console.log(userId, token)
-    try {
-        (jwt.verify(token, SECRET))
-     } catch(error) {
-        console.log(error)
-     } 
-    return users
-      .findById(userId)
+    return userApi
+      .retrieve(userId, token)
       .then(
-            ({
-            id,
-            name,
-            surname,
-            email,
-            favoriteArtists = [],
-            favoriteAlbums = [],
-            favoriteTracks = []
-            }) => ({
-            id,
-            name,
-            surname,
-            email,
-            favoriteArtists,
-            favoriteAlbums,
-            favoriteTracks
-            })
-            );
-            
+        ({
+          id,
+          name,
+          surname,
+          username: email,
+          favoriteArtists = [],
+          favoriteAlbums = [],
+          favoriteTracks = []
+        }) => ({
+          id,
+          name,
+          surname,
+          email,
+          favoriteArtists,
+          favoriteAlbums,
+          favoriteTracks
+        })
+      );
   },
 
   // TODO updateUser and removeUser
@@ -181,24 +153,19 @@ const logic = {
     const comment = {
       userId,
       artistId,
-      text,
-      date: new Date()
+      text
     };
 
     return userApi
       .retrieve(userId, token)
-      .then(() => spotifyApi.retrieveArtist(artistId))
-      .then(({ error }) => {
-        if (error) throw Error(error.message);
-      })
-      .then(() => artistComments.add(comment))
+      .then(() => artistComment.add(comment))
       .then(() => comment.id);
   },
 
   listCommentsFromArtist(artistId) {
-    // TODO validate artistId
+    // TODO artistId
 
-    return artistComments.find({ artistId });
+    return artistComment.find({ artistId });
   },
 
   /**

@@ -157,7 +157,6 @@ describe('artist comments data', () => {
     })
 
     describe('update', () => {
-        debugger
         const comment = {
             id: uuid(),
             artistId: `artistId-${Math.random()}`,

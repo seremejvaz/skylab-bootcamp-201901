@@ -1,4 +1,4 @@
-const Logic = require('./logic')
+const Logic = require('../src/logic')
 
 module.exports = {
     create(req) {
