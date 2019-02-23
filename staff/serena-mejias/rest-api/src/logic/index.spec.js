@@ -196,7 +196,6 @@ describe("logic", () => {
       //.then(hash => users.add({ name, surname, email, password: hash }))
       users.add({ name, surname, email, password })
     );
-    debugger;
     it("should succeed on correct credentials", () =>
       logic.authenticateUser(email, password).then(({ id, token }) => {
         expect(id).toBeDefined();
@@ -209,24 +208,25 @@ describe("logic", () => {
     const surname = "Barzi";
     const email = `manuelbarzi@mail.com-${Math.random()}`;
     const password = "123";
-    const passwordConfirm = password;
     let _id, _token;
     beforeEach(() =>
       users
         .add({ name, surname, email, password })
 
         .then(() => users.findByEmail(email))
-        .then((user) => {
+        .then(user => {
           let exp = { expiresIn: "24h" };
 
           _token = jwt.sign({ id: user.id }, SECRET, exp);
           _id = user.id;
         })
+        .catch(err => {
+          if (err) throw err;
+        })
     );
 
     it("should succeed on correct credentials", () =>
       logic.retrieveUser(_id, _token).then(user => {
-          console.log(user)
         expect(user.id).toBe(_id);
         expect(user.name).toBe(name);
         expect(user.surname).toBe(surname);
@@ -234,7 +234,75 @@ describe("logic", () => {
       }));
   });
 
-  // TODO updateUser and removeUser
+  describe("update user", () => {
+    const name = "Manuel";
+    const surname = "Barzi";
+    const email = `manuelbarzi@mail.com-${Math.random()}`;
+    const password = "123";
+    let _id, _token;
+
+    beforeEach(() =>
+      users
+        .add({ name, surname, email, password })
+
+        .then(() => users.findByEmail(email))
+        .then(user => {
+          let exp = { expiresIn: "24h" };
+
+          _token = jwt.sign({ id: user.id }, SECRET, exp);
+          _id = user.id;
+        })
+        .catch(err => {
+          if (err) throw err;
+        })
+    );
+
+    it("should succeed on correct credentials", () => {
+      let data = { name: "Serena" };
+      logic.updateUser(_id, _token, data).then(() =>
+        users.findById(_id).then(user => {
+          expect(user.id).toBe(_id);
+          expect(user.name).toBe(name);
+          expect(user.surname).toBe(surname);
+          expect(user.email).toBe(email);
+          expect(user.data).toBe(_data);
+        })
+      );
+    });
+  });
+
+  describe("remove user", () => {
+    const name = "Manuel";
+    const surname = "Barzi";
+    const email = `manuelbarzi@mail.com-${Math.random()}`;
+    const password = "123";
+    let _id, _token;
+
+    beforeEach(() =>
+      users
+        .add({ name, surname, email, password })
+            .then(() => users.findByEmail(email))
+            .then(user => {
+            let exp = { expiresIn: "24h" };
+
+            _token = jwt.sign({ id: user.id }, SECRET, exp);
+            _id = user.id;
+            })
+            .catch(err => {
+            if (err) throw err;
+            })
+    );
+
+    it("should succeed on remove a user", () => {
+      logic.removeUser(_id, _token).then(() =>
+        users.findById(_id).then(user => {
+          expect(user).toBeNull;
+        })
+      );
+    });
+  });
+
+ 
 
   describe("search artists", () => {
     it("should succeed on mathing query", () => {

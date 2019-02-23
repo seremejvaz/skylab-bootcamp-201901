@@ -1,14 +1,16 @@
 "use strict";
 
-require('dotenv').config()
+require("dotenv").config();
 
 const spotifyApi = require("../spotify-api");
 const userApi = require("../user-api");
 const users = require("../data/users");
 const artistComments = require("../data/artist-comments");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
-const { env: { SECRET } } = process
+const {
+  env: { SECRET }
+} = process;
 /**
  * Abstraction of business logic.
  */
@@ -73,53 +75,81 @@ const logic = {
     return users.findByEmail(email).then(user => {
       if (!user) throw Error(`user with email ${email} not found`);
       if (user.password !== password) throw Error("wrong credentials");
-      
+
       if (user && password) {
         let user_Id = { id: user.id };
 
         let secret = SECRET;
 
-        let exp = { expiresIn: '24h' };
+        let exp = { expiresIn: "24h" };
 
         let token = jwt.sign(user_Id, secret, exp);
-        
-        return {id: user.id, token};
+
+        return { id: user.id, token };
       }
     });
   },
 
   retrieveUser(userId, token) {
-      console.log(userId, token)
     try {
-        (jwt.verify(token, SECRET))
-     } catch(error) {
-        console.log(error)
-     } 
+      jwt.verify(token, SECRET);
+    } catch (error) {
+      throw Error;
+    }
     return users
       .findById(userId)
       .then(
-            ({
-            id,
-            name,
-            surname,
-            email,
-            favoriteArtists = [],
-            favoriteAlbums = [],
-            favoriteTracks = []
-            }) => ({
-            id,
-            name,
-            surname,
-            email,
-            favoriteArtists,
-            favoriteAlbums,
-            favoriteTracks
-            })
-            );
-            
+        ({
+          id,
+          name,
+          surname,
+          email,
+          favoriteArtists = [],
+          favoriteAlbums = [],
+          favoriteTracks = []
+        }) => ({
+          id,
+          name,
+          surname,
+          email,
+          favoriteArtists,
+          favoriteAlbums,
+          favoriteTracks
+        })
+      );
   },
 
-  // TODO updateUser and removeUser
+  updateUser(userId, token, data) {
+    if (typeof token !== "string") throw TypeError(`${token} is not a string`);
+
+    if (!token.trim().length) throw Error("token cannot be empty");
+
+    if (typeof userId !== "string")
+      throw TypeError(userId + " is not a string");
+
+    if (!userId.trim().length) throw Error("userId cannot be empty");
+
+    if (!data) throw Error("data should be defined");
+
+    if (data.constructor !== Object)
+      throw TypeError(`${data} is not an object`);
+
+    return users.update(userId, data);
+  },
+  /**
+   *
+   * @param {*} userId
+   * @param {*} token
+   */
+  removeUser(userId, token) {
+    if (typeof token !== "string") throw TypeError(`${token} is not a string`);
+    if (!token.trim().length) throw Error("token cannot be empty");
+    if (typeof userId !== "string")
+      throw TypeError(userId + " is not a string");
+    if (!userId.trim().length) throw Error("userId cannot be empty");
+
+    return users.remove(userId);
+  },
 
   /**
    * Search artists.

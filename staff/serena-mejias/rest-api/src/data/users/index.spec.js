@@ -22,7 +22,7 @@ describe("user", () => {
 
   beforeEach(() => users.collection.deleteMany());
 
-  describe("add", () => {
+  xdescribe("add", () => {
     const _user = {
       name: "Tachi",
       surname: "Melodin",
@@ -47,7 +47,7 @@ describe("user", () => {
         }));
   });
 
-  describe("findByEmail", () => {
+  xdescribe("findByEmail", () => {
     const _user = {
       name: "Tachi",
       surname: "Melodin",
@@ -84,25 +84,82 @@ describe("user", () => {
       password: "meguhtalagasssolina"
     };
 
-    beforeEach(() => users.collection.insertOne(_user));
+    let userId;
 
-    it("should succeed on correct data", () =>
-      users
-        .findById(_user.id)
-        .then(({ id, _id, name, surname, email, password }) => {
-          expect(id).to.exist;
-          expect(id).to.be.a("string");
-          expect(_id).not.to.exist;
-          expect(name).to.equal(_user.name);
-          expect(surname).to.equal(_user.surname);
-          expect(email).to.equal(_user.email);
-          expect(password).to.equal(_user.password);
-        }));
+    beforeEach(() => {
+      users.collection.insertOne(_user).then(res => {
+        userId = res.insertedId.toString();
+      });
+    });
 
-    it("should resolve null on non matching email", () =>
-      users
-        .findById("-123-123-")
-        .then(user => expect(user).to.be.null));
+    it("should succeed on correct data", () => {
+      console.log("Doing test");
+
+      users.findById(userId).then(user => {
+        expect(user.id).to.exist;
+        expect(user.id).to.be.a("string");
+        expect(user._id).not.to.exist;
+        expect(user.name).to.equal(_user.name);
+        expect(user.surname).to.equal(_user.surname);
+        expect(user.email).to.equal(_user.email);
+        expect(user.password).to.equal(_user.password);
+      });
+    });
+
+    xit("should resolve null on non matching email", () =>
+      users.findById("-123-123-").then(user => expect(user).to.be.null));
+  });
+
+  xdescribe("update", () => {
+    const _user = {
+      name: "Tachi",
+      surname: "Melodin",
+      email: "tachito",
+      password: "meguhtalagasssolina"
+    };
+
+    beforeEach(() =>
+      users.collection
+        .insertOne(_user)
+        .then(res => (_user.id = res.insertedId.toString()))
+    );
+
+    it("should succeed on correct data", () => {
+      const data = { name: "testUsername" };
+      return users
+        .update(_user.id, data)
+        .then(() => users.findById(userId))
+        .then(user => {
+          expect(user).to.exist;
+          expect(user.id).to.be.a("string");
+          expect(user.name).to.equal(data.name);
+          expect(user.surname).to.equal(data.surname);
+          expect(user.email).to.equal(data.email);
+          expect(user.password).to.equal(data.password);
+        });
+    });
+  });
+
+  xdescribe("remove", () => {
+    const _user = {
+      name: "Tachi",
+      surname: "Melodin",
+      email: "tachito",
+      password: "meguhtalagasssolina"
+    };
+
+    beforeEach(() =>
+      users.collection
+        .insertOne(_user)
+        .then(res => (userId = res.insertedId.toString()))
+    );
+
+    it("should succeed removing user", () => {
+      return users
+        .remove(user.id)
+        .then(() => users.findOne({ _id: ObjectId(userId) }))
+        .then(res => expect(res).to.be.null);
+    });
   });
 
   after(() => users.collection.deleteMany().then(() => client.close()));

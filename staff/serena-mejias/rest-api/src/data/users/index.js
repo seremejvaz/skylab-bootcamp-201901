@@ -1,5 +1,7 @@
 "use strict";
-const { ObjectId } = require('mongodb');
+
+const { ObjectId } = require("mongodb");
+
 const user = {
   collection: null,
 
@@ -37,12 +39,39 @@ const user = {
   },
 
   findById(userId) {
-    return this.collection.findOne({ _id : ObjectId(userId) }).then(user => {
+    return this.collection.findOne({ _id: ObjectId(userId) }).then(user => {
       if (!user) return null;
       user.id = user._id.toString();
       delete user._id;
       return user;
     });
+  },
+
+  update(userId, data) {
+    if (userId === undefined || userId === null)
+      throw Error("id should be defined");
+    if (typeof userId !== "string")
+      throw TypeError(`${userId} should be a string`);
+    if (!data) throw Error("data is not defined");
+    if (data.constructor !== Object)
+      throw TypeError(`${data} should be an object`);
+
+    /*db.collection.findOneAndUpdate(
+   <filter>,
+   <update>,
+)*/
+    return this.collection.findOneAndUpdate(
+      { _id: ObjectId(userId) },
+      { $set: data }
+    );
+  },
+
+  remove(userId) {
+    if (userId === undefined || userId === null)
+      throw Error("id should be defined");
+    if (typeof userId !== "string")
+      throw TypeError(`${userId} should be a string`);
+    return this.collection.deleteOne({ _id: ObjectId(userId) });
   }
 };
 
