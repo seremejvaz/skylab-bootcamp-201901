@@ -22,7 +22,7 @@ describe("user", () => {
 
   beforeEach(() => users.collection.deleteMany());
 
-  xdescribe("add", () => {
+  describe("add", () => {
     const _user = {
       name: "Tachi",
       surname: "Melodin",
@@ -47,7 +47,7 @@ describe("user", () => {
         }));
   });
 
-  xdescribe("findByEmail", () => {
+  describe("findByEmail", () => {
     const _user = {
       name: "Tachi",
       surname: "Melodin",
@@ -87,14 +87,12 @@ describe("user", () => {
     let userId;
 
     beforeEach(() => {
-      users.collection.insertOne(_user).then(res => {
-        userId = res.insertedId.toString();
+      return users.collection.insertOne(_user).then(res => {
+        return userId = res.insertedId.toString();
       });
     });
 
     it("should succeed on correct data", () => {
-      console.log("Doing test");
-
       users.findById(userId).then(user => {
         expect(user.id).to.exist;
         expect(user.id).to.be.a("string");
@@ -105,12 +103,9 @@ describe("user", () => {
         expect(user.password).to.equal(_user.password);
       });
     });
-
-    xit("should resolve null on non matching email", () =>
-      users.findById("-123-123-").then(user => expect(user).to.be.null));
   });
 
-  xdescribe("update", () => {
+  describe("update", () => {
     const _user = {
       name: "Tachi",
       surname: "Melodin",
@@ -140,7 +135,7 @@ describe("user", () => {
     });
   });
 
-  xdescribe("remove", () => {
+  describe("remove", () => {
     const _user = {
       name: "Tachi",
       surname: "Melodin",
