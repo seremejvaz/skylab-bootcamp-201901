@@ -1,0 +1,16 @@
+.feedback {
+    border: 1px solid gray;
+    border-radius: 0.5em;
+    background-color: greenyellow;
+    padding: 0.5em;
+}
+
+.feedback--warn {
+    background-color: yellow;
+    padding: 0.5em;
+}
+
+.feedback--error {
+    background-color: tomato;
+    padding: 0.5em;
+}

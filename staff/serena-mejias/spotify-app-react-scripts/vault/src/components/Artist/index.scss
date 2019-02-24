@@ -1,0 +1,9 @@
+@import '../App/App.scss';
+
+.artists__container {
+    h3 {
+        @extend %middle-header;
+        margin-left: 2em;
+        margin-bottom: 2em;
+    }
+}
