@@ -50,8 +50,8 @@ const user = {
   update(userId, data) {
     if (userId === undefined || userId === null)
       throw Error("id should be defined");
-    if (typeof userId !== "string")
-      throw TypeError(`${userId} should be a string`);
+   // if (typeof userId !== "string")
+      //throw TypeError(`${userId} should be a string`);
     if (!data) throw Error("data is not defined");
     if (data.constructor !== Object)
       throw TypeError(`${data} should be an object`);

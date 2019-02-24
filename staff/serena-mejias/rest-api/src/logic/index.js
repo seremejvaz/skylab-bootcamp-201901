@@ -134,6 +134,12 @@ const logic = {
     if (data.constructor !== Object)
       throw TypeError(`${data} is not an object`);
 
+    try {
+      jwt.verify(token, SECRET);
+    } catch (error) {
+      throw Error;
+    }
+
     return users.update(userId, data);
   },
   /**
@@ -147,6 +153,12 @@ const logic = {
     if (typeof userId !== "string")
       throw TypeError(userId + " is not a string");
     if (!userId.trim().length) throw Error("userId cannot be empty");
+
+    try {
+      jwt.verify(token, SECRET);
+    } catch (error) {
+      throw Error;
+    }
 
     return users.remove(userId);
   },
@@ -191,7 +203,14 @@ const logic = {
    * @param {string} artistId - The id of the artist to toggle in favorites.
    */
   toggleFavoriteArtist(userId, token, artistId) {
-    return userApi.retrieve(userId, token).then(user => {
+    try {
+      jwt.verify(token, SECRET);
+    } catch (error) {
+      throw Error;
+    }
+
+    return users.findById(userId).then(user => {
+      debugger
       const { favoriteArtists = [] } = user;
 
       const index = favoriteArtists.findIndex(
@@ -201,12 +220,18 @@ const logic = {
       if (index < 0) favoriteArtists.push(artistId);
       else favoriteArtists.splice(index, 1);
 
-      return userApi.update(userId, token, { favoriteArtists });
+      return users.update(userId, { favoriteArtists });
     });
   },
 
   addCommentToArtist(userId, token, artistId, text) {
     // TODO validate userId, token, artistId and text
+
+    try {
+      jwt.verify(token, SECRET);
+    } catch (error) {
+      throw Error;
+    }
 
     const comment = {
       userId,
@@ -215,9 +240,8 @@ const logic = {
       date: new Date()
     };
 
-    return userApi
-      .retrieve(userId, token)
-      .then(() => spotifyApi.retrieveArtist(artistId))
+    return spotifyApi
+      .retrieveArtist(artistId)
       .then(({ error }) => {
         if (error) throw Error(error.message);
       })
@@ -265,7 +289,15 @@ const logic = {
    * @param {string} albumId - The id of the album to toggle in favorites.
    */
   toggleFavoriteAlbum(userId, token, albumId) {
-    return userApi.retrieve(userId, token).then(user => {
+    // TODO validate arguments
+
+    try {
+      jwt.verify(token, SECRET);
+    } catch (error) {
+      throw Error;
+    }
+
+    return users.findById(userId).then(user => {
       const { favoriteAlbums = [] } = user;
 
       const index = favoriteAlbums.findIndex(_albumId => _albumId === albumId);
@@ -273,7 +305,7 @@ const logic = {
       if (index < 0) favoriteAlbums.push(albumId);
       else favoriteAlbums.splice(index, 1);
 
-      return userApi.update(userId, token, { favoriteAlbums });
+      return users.update(userId, { favoriteAlbums });
     });
   },
 
@@ -311,7 +343,15 @@ const logic = {
    * @param {string} trackId - The id of the track to toggle in favorites.
    */
   toggleFavoriteTrack(userId, token, trackId) {
-    return userApi.retrieve(userId, token).then(user => {
+    // TODO validate arguments
+
+    try {
+      jwt.verify(token, SECRET);
+    } catch (error) {
+      throw Error;
+    }
+
+    return users.findById(userId).then(user => {
       const { favoriteTracks = [] } = user;
 
       const index = favoriteTracks.findIndex(_trackId => _trackId === trackId);
@@ -319,7 +359,7 @@ const logic = {
       if (index < 0) favoriteTracks.push(trackId);
       else favoriteTracks.splice(index, 1);
 
-      return userApi.update(userId, token, { favoriteTracks });
+      return users.update(userId, { favoriteTracks });
     });
   }
 };

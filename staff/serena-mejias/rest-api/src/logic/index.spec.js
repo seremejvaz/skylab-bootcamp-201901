@@ -281,16 +281,16 @@ describe("logic", () => {
     beforeEach(() =>
       users
         .add({ name, surname, email, password })
-            .then(() => users.findByEmail(email))
-            .then(user => {
-            let exp = { expiresIn: "24h" };
+        .then(() => users.findByEmail(email))
+        .then(user => {
+          let exp = { expiresIn: "24h" };
 
-            _token = jwt.sign({ id: user.id }, SECRET, exp);
-            _id = user.id;
-            })
-            .catch(err => {
-            if (err) throw err;
-            })
+          _token = jwt.sign({ id: user.id }, SECRET, exp);
+          _id = user.id;
+        })
+        .catch(err => {
+          if (err) throw err;
+        })
     );
 
     it("should succeed on remove a user", () => {
@@ -301,8 +301,6 @@ describe("logic", () => {
       );
     });
   });
-
- 
 
   describe("search artists", () => {
     it("should succeed on mathing query", () => {
@@ -351,26 +349,34 @@ describe("logic", () => {
     const name = "Manuel";
     const surname = "Barzi";
     const email = `manuelbarzi@mail.com-${Math.random()}`;
-    const password = "123";
-    const passwordConfirm = password;
+    const password = `123-${Math.random()}`;
     const artistId = "6tbjWDEIzxoDsBA1FuhfPW"; // madonna
     let _id, _token;
 
+    debugger
     beforeEach(() =>
-      userApi
-        .register(name, surname, email, password)
-        .then(() => userApi.authenticate(email, password))
-        .then(({ id, token }) => {
-          _id = id;
-          _token = token;
+      users
+        .add({ name, surname, email, password })
+        .then(() => users.findByEmail(email))
+        .then(user => {
+          let exp = { expiresIn: "24h" };
+
+          _token = jwt.sign({ id: user.id }, SECRET, exp);
+          _id = user.id;
+        })
+        .catch(err => {
+          if (err) throw err;
         })
     );
 
     it("should succeed on correct data", () =>
       logic
         .toggleFavoriteArtist(_id, _token, artistId)
-        .then(() => logic.retrieveUser(_id, _token))
+        .then(() => users.findById(_id))
         .then(user => {
+          console.log(user);
+          debugger
+          
           expect(user.id).toBe(_id);
           expect(user.name).toBe(name);
           expect(user.surname).toBe(surname);
@@ -382,7 +388,7 @@ describe("logic", () => {
 
           return logic.toggleFavoriteArtist(_id, _token, artistId);
         })
-        .then(() => logic.retrieveUser(_id, _token))
+        .then(() => users.findById(_id))
         .then(user => {
           expect(user.id).toBe(_id);
           expect(user.name).toBe(name);
@@ -398,21 +404,23 @@ describe("logic", () => {
     const name = "Manuel";
     const surname = "Barzi";
     const email = `manuelbarzi@mail.com-${Math.random()}`;
-    const password = "123";
+    const password = `123-${Math.random()}`;
     const artistId = "6tbjWDEIzxoDsBA1FuhfPW"; // madonna
     const text = `comment ${Math.random()}`;
     let _id, _token;
 
     beforeEach(() =>
-      // FATAL each test should test ONE unit
-      // logic.registerUser(name, surname, email, password, passwordConfirm)
-      //     .then(() => logic.authenticateUser(email, password))
-      userApi
-        .register(name, surname, email, password)
-        .then(() => userApi.authenticate(email, password))
-        .then(({ id, token }) => {
-          _id = id;
-          _token = token;
+      users
+        .add({ name, surname, email, password })
+        .then(() => users.findByEmail(email))
+        .then(user => {
+          let exp = { expiresIn: "24h" };
+
+          _token = jwt.sign({ id: user.id }, SECRET, exp);
+          _id = user.id;
+        })
+        .catch(err => {
+          if (err) throw err;
         })
     );
 
@@ -435,7 +443,7 @@ describe("logic", () => {
     const name = "Manuel";
     const surname = "Barzi";
     const email = `manuelbarzi@mail.com-${Math.random()}`;
-    const password = "123";
+    const password = `123-${Math.random()}`;
     const artistId = "6tbjWDEIzxoDsBA1FuhfPW"; // madonna
     const text = `comment ${Math.random()}`;
     const text2 = `comment ${Math.random()}`;
@@ -444,16 +452,19 @@ describe("logic", () => {
     let _id, _token;
 
     beforeEach(() =>
-      // FATAL each test should test ONE unit
-      // logic.registerUser(name, surname, email, password, passwordConfirm)
-      //     .then(() => logic.authenticateUser(email, password))
-      userApi
-        .register(name, surname, email, password)
-        .then(() => userApi.authenticate(email, password))
-        .then(({ id, token }) => {
-          _id = id;
-          _token = token;
+      users
+        .add({ name, surname, email, password })
+        .then(() => users.findByEmail(email))
+        .then(user => {
+          let exp = { expiresIn: "24h" };
+
+          _token = jwt.sign({ id: user.id }, SECRET, exp);
+          _id = user.id;
         })
+        .catch(err => {
+          if (err) throw err;
+        })
+
         .then(() =>
           artistComments.add((comment = { userId: _id, artistId, text }))
         )
@@ -531,25 +542,29 @@ describe("logic", () => {
     const name = "Manuel";
     const surname = "Barzi";
     const email = `manuelbarzi@mail.com-${Math.random()}`;
-    const password = "123";
-    const passwordConfirm = password;
+    const password = `123-${Math.random()}`;
     const albumId = "4hBA7VgOSxsWOf2N9dJv2X"; // Rebel Heart Tour (Live)
     let _id, _token;
 
     beforeEach(() =>
-      userApi
-        .register(name, surname, email, password)
-        .then(() => userApi.authenticate(email, password))
-        .then(({ id, token }) => {
-          _id = id;
-          _token = token;
+      users
+        .add({ name, surname, email, password })
+        .then(() => users.findByEmail(email))
+        .then(user => {
+          let exp = { expiresIn: "24h" };
+
+          _token = jwt.sign({ id: user.id }, SECRET, exp);
+          _id = user.id;
+        })
+        .catch(err => {
+          if (err) throw err;
         })
     );
 
     it("should succeed on correct data", () =>
       logic
         .toggleFavoriteAlbum(_id, _token, albumId)
-        .then(() => logic.retrieveUser(_id, _token))
+        .then(() => users.findById(_id))
         .then(user => {
           expect(user.id).toBe(_id);
           expect(user.name).toBe(name);
@@ -562,7 +577,7 @@ describe("logic", () => {
 
           return logic.toggleFavoriteAlbum(_id, _token, albumId);
         })
-        .then(() => logic.retrieveUser(_id, _token))
+        .then(() => users.findById(_id))
         .then(user => {
           expect(user.id).toBe(_id);
           expect(user.name).toBe(name);
@@ -622,25 +637,29 @@ describe("logic", () => {
     const name = "Manuel";
     const surname = "Barzi";
     const email = `manuelbarzi@mail.com-${Math.random()}`;
-    const password = "123";
-    const passwordConfirm = password;
+    const password = `123-${Math.random()}`;
     const trackId = "5U1tMecqLfOkPDIUK9SVKa"; // Rebel Heart Tour Intro - Live)
     let _id, _token;
 
     beforeEach(() =>
-      userApi
-        .register(name, surname, email, password)
-        .then(() => userApi.authenticate(email, password))
-        .then(({ id, token }) => {
-          _id = id;
-          _token = token;
+      users
+        .add({ name, surname, email, password })
+        .then(() => users.findByEmail(email))
+        .then(user => {
+          let exp = { expiresIn: "24h" };
+
+          _token = jwt.sign({ id: user.id }, SECRET, exp);
+          _id = user.id;
+        })
+        .catch(err => {
+          if (err) throw err;
         })
     );
 
     it("should succeed on correct data", () =>
       logic
         .toggleFavoriteTrack(_id, _token, trackId)
-        .then(() => logic.retrieveUser(_id, _token))
+        .then(() => users.findById(_id))
         .then(user => {
           expect(user.id).toBe(_id);
           expect(user.name).toBe(name);
@@ -653,7 +672,7 @@ describe("logic", () => {
 
           return logic.toggleFavoriteTrack(_id, _token, trackId);
         })
-        .then(() => logic.retrieveUser(_id, _token))
+        .then(() => users.findById(_id))
         .then(user => {
           expect(user.id).toBe(_id);
           expect(user.name).toBe(name);

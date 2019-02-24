@@ -88,7 +88,7 @@ describe("user", () => {
 
     beforeEach(() => {
       return users.collection.insertOne(_user).then(res => {
-        return userId = res.insertedId.toString();
+        return (userId = res.insertedId.toString());
       });
     });
 
@@ -113,24 +113,26 @@ describe("user", () => {
       password: "meguhtalagasssolina"
     };
 
-    beforeEach(() =>
-      users.collection
+    let userId;
+
+    beforeEach(() => {
+      return users.collection
         .insertOne(_user)
-        .then(res => (_user.id = res.insertedId.toString()))
-    );
+        .then(res => (userId = res.insertedId.toString()));
+    });
 
     it("should succeed on correct data", () => {
       const data = { name: "testUsername" };
       return users
-        .update(_user.id, data)
+        .update(userId, data)
         .then(() => users.findById(userId))
         .then(user => {
           expect(user).to.exist;
           expect(user.id).to.be.a("string");
           expect(user.name).to.equal(data.name);
-          expect(user.surname).to.equal(data.surname);
-          expect(user.email).to.equal(data.email);
-          expect(user.password).to.equal(data.password);
+          expect(user.surname).to.exist;
+          expect(user.email).to.exist;
+          expect(user.password).to.exist;
         });
     });
   });
@@ -143,17 +145,19 @@ describe("user", () => {
       password: "meguhtalagasssolina"
     };
 
-    beforeEach(() =>
-      users.collection
+    let userId;
+
+    beforeEach(() => {
+      return users.collection
         .insertOne(_user)
-        .then(res => (userId = res.insertedId.toString()))
-    );
+        .then(res => (userId = res.insertedId.toString()));
+    });
 
     it("should succeed removing user", () => {
       return users
-        .remove(user.id)
-        .then(() => users.findOne({ _id: ObjectId(userId) }))
-        .then(res => expect(res).to.be.null);
+        .remove(userId)
+          .then(() => users.collection.findOne({ _id: ObjectId(userId) }))
+          .then(res => expect(res).to.be.null);
     });
   });
 
