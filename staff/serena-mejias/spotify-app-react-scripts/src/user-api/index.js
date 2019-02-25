@@ -8,7 +8,7 @@ const userApi = {
         if (typeof password !== 'string') throw TypeError(`${password} is not a string`)
         if (!password.trim().length) throw Error('password is empty')
 
-        return fetch('https://skylabcoders.herokuapp.com/api/user', { 
+        return fetch('https://localhost:8000/api/user', { 
             method: 'POST', 
             headers: {
                 'content-type': 'application/json'
@@ -33,7 +33,7 @@ const userApi = {
       throw TypeError(`${password} is not string`);
     if (!password.trim().length) throw Error("password is empty");
 
-    return fetch("https://skylabcoders.herokuapp.com/api/user", {
+    return fetch("https://localhost:8000/api/user", {
       method: "POST",
       headers: {
         "content-type": "application/json"
@@ -60,7 +60,7 @@ const userApi = {
       throw TypeError(password + " is not a string");
     if (!password.trim().length) throw Error("password is empty");
 
-    return fetch("https://skylabcoders.herokuapp.com/api/auth", {
+    return fetch("https://localhost:8000/api/auth", {
       method: "POST",
       headers: {
         "content-type": "application/json"
@@ -89,7 +89,7 @@ const userApi = {
     if (!token.trim().length) throw Error("token cannot be empty");
 
     return fetch(
-      `https://skylabcoders.herokuapp.com/api/user/${id}`,
+      `https://localhost:8000/api/user/${id}`,
       {
         headers: {
           "content-type": "application/json",
