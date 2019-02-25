@@ -1,6 +1,6 @@
 "use strict";
 
-const userApi = {
+const musicApi = {
   url: "http://localhost:8000/api",
 
   register(name, surname, email, password, passwordConfirm) {
@@ -146,4 +146,4 @@ const userApi = {
   }
 };
 
-export default userApi;
+export default musicApi;
