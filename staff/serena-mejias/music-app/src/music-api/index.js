@@ -14,7 +14,8 @@ const musicApi = {
     if (typeof email !== "string") throw TypeError(`${email} is not a string`);
     if (!email.trim().length) throw Error("email is empty");
 
-    if (typeof password !== "string")
+      debugger
+      if (typeof password !== "string")
       throw TypeError(`${password} is not a string`);
     if (!password.trim().length) throw Error("password is empty");
 
@@ -43,7 +44,7 @@ const musicApi = {
     if (typeof password !== "string")
       throw TypeError(`${password} is not a string`);
     if (!password.trim().length) throw Error("password is empty");
-
+    debugger
     return fetch(`${this.url}/user/authenticate`, {
       method: "POST",
       headers: {

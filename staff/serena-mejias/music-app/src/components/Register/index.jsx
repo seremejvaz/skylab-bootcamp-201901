@@ -21,7 +21,6 @@ class Register extends Component {
     this.setState({ passwordConformation: event.target.value });
 
   handleFormSubmit = event => {
-    debugger  
     event.preventDefault();
     this.props.onRegister(
       this.state.name,
@@ -45,7 +44,7 @@ class Register extends Component {
 
     return (
       <section className="register">
-        <h2>{title}</h2>
+        <h2>Register</h2>
 
         <form onSubmit={handleFormSubmit}>
           <input

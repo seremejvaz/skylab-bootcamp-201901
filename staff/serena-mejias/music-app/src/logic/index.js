@@ -67,7 +67,7 @@ const logic = {
 
     if (!password.trim().length) throw Error("password cannot be empty");
 
-    return musicApi.authenticate(email, password).then(({ id, token }) => {
+    return musicApi.authenticateUser(email, password).then(({ id, token }) => {
       this.__userId__ = id;
       this.__userApiToken__ = token;
     });

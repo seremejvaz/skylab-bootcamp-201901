@@ -54,7 +54,6 @@ const logic = {
 
     if (password !== passwordConfirmation)
       throw Error("passwords do not match");
-      debugger
       // return userApi.register(name, surname, email, password)
       return users.findByEmail(email)
       .then(user => {

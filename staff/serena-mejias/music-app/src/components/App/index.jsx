@@ -5,7 +5,7 @@ import { Route, withRouter, Link } from "react-router-dom";
 //import LanguageSelector from "../LanguageSelector";
 import Register from "../Register";
 import Login from "../Login";
-//import Home from "../Home";
+import Home from "../Home";
 //import i18n from "../../i18n";
 import logic from "../../logic";
 //import "./index.sass";
@@ -39,6 +39,7 @@ class App extends Component {
           render={() => <Register onRegister={handleRegister} />}
         />
         <Route path="/login" render={() => <Login onLogin={handleLogin} />} />}
+        <Route path="/home" render={() => <Home />} />
       </main>
     );
   }
