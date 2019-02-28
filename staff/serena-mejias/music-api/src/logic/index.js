@@ -3,10 +3,10 @@
 require("dotenv").config();
 
 const spotifyApi = require("../spotify-api");
-const users = require("../data/users");
-const artistComments = require("../data/artist-comments");
+const { User, Comment } = require("../models");
 const jwt = require("jsonwebtoken");
-const bcrypt = require('bcrypt'); 
+const bcrypt = require("bcrypt");
+const users = require("../data/users") 
 
 const {
   env: { SECRET }
@@ -15,7 +15,6 @@ const {
  * Abstraction of business logic.
  */
 const logic = {
-
   jwtSecret: null,
 
   /**
@@ -54,14 +53,20 @@ const logic = {
 
     if (password !== passwordConfirmation)
       throw Error("passwords do not match");
-      // return userApi.register(name, surname, email, password)
-      return users.findByEmail(email)
-      .then(user => {
-                if (user) throw Error(`user with email ${email} already exists`)
-
-                return bcrypt.hash(password, 10)  
-            })
-            .then(hash => users.add({ name, surname, email, password: hash }))
+    // return userApi.register(name, surname, email, password)
+    return (async () => {
+      debugger;
+      const user = await User.findOne({ email });
+      if (user) throw Error(`user with email ${email} already exists`);
+      const hash = await bcrypt.hash(password, 10);
+      const { id } = await User.create({
+        name,
+        surname,
+        email,
+        password: hash
+      });
+      return id;
+    })();
   },
 
   /**
@@ -80,7 +85,8 @@ const logic = {
 
     if (!password.trim().length) throw Error("password cannot be empty");
 
-    return users.findByEmail(email).then(user => {
+    return (async () => {
+      const user = await users.findByEmail(email);
       if (!user) throw Error(`user with email ${email} not found`);
       if (user.password !== password) throw Error("wrong credentials");
 
@@ -95,36 +101,30 @@ const logic = {
 
         return { id: user.id, token };
       }
-    });
+    })()
+  },
+
+  __verifyToken__(token) {
+    const { sub } = jwt.verify(token, this.jwtSecret);
+
+    if (!sub) throw Error(`user id not present in token ${token}`);
+
+    return sub;
   },
 
   retrieveUser(userId, token) {
-    try {
-      jwt.verify(token, SECRET);
-    } catch (error) {
-      throw Error;
-    }
-    return users
-      .findById(userId)
-      .then(
-        ({
-          id,
-          name,
-          surname,
-          email,
-          favoriteArtists = [],
-          favoriteAlbums = [],
-          favoriteTracks = []
-        }) => ({
-          id,
-          name,
-          surname,
-          email,
-          favoriteArtists,
-          favoriteAlbums,
-          favoriteTracks
-        })
-      );
+    const userId = this.__verifyToken__(token);
+
+    return (async () => {
+      await users.findById(userId);
+      await (user => {
+        if (!user) throw Error(`user with id ${id} not found`);
+
+        delete user.password;
+
+        return user;
+      });
+    })();
   },
 
   updateUser(userId, token, data) {
@@ -218,7 +218,6 @@ const logic = {
     }
 
     return users.findById(userId).then(user => {
-      debugger
       const { favoriteArtists = [] } = user;
 
       const index = favoriteArtists.findIndex(
@@ -232,14 +231,10 @@ const logic = {
     });
   },
 
-  addCommentToArtist(userId, token, artistId, text) {
+  addCommentToArtist(token, artistId, text) {
     // TODO validate userId, token, artistId and text
 
-    try {
-      jwt.verify(token, SECRET);
-    } catch (error) {
-      throw Error;
-    }
+    const userId = this.__verifyToken__(token);
 
     const comment = {
       userId,
@@ -248,13 +243,13 @@ const logic = {
       date: new Date()
     };
 
-    return spotifyApi
-      .retrieveArtist(artistId)
-      .then(({ error }) => {
-        if (error) throw Error(error.message);
-      })
-      .then(() => artistComments.add(comment))
-      .then(() => comment.id);
+    return (async () => {
+      const res = await spotifyApi.retrieveArtist(artistId);
+      if (res.error) throw Error(res.error.message);
+
+      await artistComments.add(comment);
+      return comment.id;
+    })();
   },
 
   listCommentsFromArtist(artistId) {
@@ -370,6 +365,6 @@ const logic = {
       return users.update(userId, { favoriteTracks });
     });
   }
-};  
+};
 
 module.exports = logic;

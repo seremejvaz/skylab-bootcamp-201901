@@ -14,11 +14,9 @@ const musicApi = {
     if (typeof email !== "string") throw TypeError(`${email} is not a string`);
     if (!email.trim().length) throw Error("email is empty");
 
-      debugger
-      if (typeof password !== "string")
+    if (typeof password !== "string")
       throw TypeError(`${password} is not a string`);
     if (!password.trim().length) throw Error("password is empty");
-
     if (typeof passwordConfirmation !== "string")
       throw TypeError(`${passwordConfirmation} is not a string`);
     if (!passwordConfirmation.trim().length)
@@ -28,7 +26,13 @@ const musicApi = {
       headers: {
         "content-type": "application/json"
       },
-      body: JSON.stringify({ name, surname, email, password, passwordConfirmation })
+      body: JSON.stringify({
+        name,
+        surname,
+        email,
+        password,
+        passwordConfirmation
+      })
     })
       .then(response => response.json())
       .then(({ id, error }) => {
@@ -44,7 +48,7 @@ const musicApi = {
     if (typeof password !== "string")
       throw TypeError(`${password} is not a string`);
     if (!password.trim().length) throw Error("password is empty");
-    debugger
+    debugger;
     return fetch(`${this.url}/user/authenticate`, {
       method: "POST",
       headers: {

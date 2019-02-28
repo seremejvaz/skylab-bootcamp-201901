@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 
-class Results extends Component {
-  render() {
+function Results({ results, onItemClick }) {
+  debugger
     return (
       <section>
         <ul>
@@ -15,13 +15,13 @@ class Results extends Component {
                     onItemClick(id);
                   }}
                 >
-                  {name}
-                </a>{" "}
+                  {results.name}
+                </a>
               </li>
             ))}
         </ul>
       </section>
     );
   }
-}
+
 export default Results;

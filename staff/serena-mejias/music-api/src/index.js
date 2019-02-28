@@ -2,11 +2,10 @@ require("dotenv").config();
 
 require("isomorphic-fetch");
 
-const { MongoClient } = require("mongodb");
+const mongoose = require("mongoose");
 const express = require("express");
 const bodyParser = require("body-parser");
 const spotifyApi = require("./spotify-api");
-const users = require("./data/users");
 const logic = require("./logic");
 const cors = require("cors");
 const {
@@ -31,11 +30,8 @@ const {
   argv: [, , port = PORT || 8000]
 } = process;
 
-MongoClient.connect(DB_URL, { useNewUrlParser: true })
-  .then(client => {
-    const db = client.db();
-    users.collection = db.collection("users");
-
+mongoose.connect(DB_URL, { useNewUrlParser: true })
+  .then(() => {
     spotifyApi.token = SPOTIFY_API_TOKEN;
     logic.jwtSecret = JWT_SECRET;
 
@@ -51,7 +47,7 @@ MongoClient.connect(DB_URL, { useNewUrlParser: true })
 
     router.get("/user/:id", retrieveUser);
 
-    router.get("/artists", searchArtists);
+    router.get("/search/:query", searchArtists);
 
     router.get("/artists/:artistId", retrieveArtist);
 
@@ -78,3 +74,10 @@ MongoClient.connect(DB_URL, { useNewUrlParser: true })
     app.listen(port, () => console.log(`server running on port ${port}`));
   })
   .catch(console.error);
+
+ process.on('SIGINT', async () => {
+    await mongoose.disconnect()
+    console.log('\nserver stopped')
+            
+    process.exit(0)
+  })
