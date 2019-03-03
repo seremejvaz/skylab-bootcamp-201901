@@ -7,9 +7,10 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const spotifyApi = require("./spotify-api");
 const logic = require("./logic");
+const package = require("../package.json");
 const cors = require("cors");
 const {
-  registerUser, 
+  registerUser,
   authenticateUser,
   retrieveUser,
   retrievesingletrack,
@@ -30,7 +31,8 @@ const {
   argv: [, , port = PORT || 8000]
 } = process;
 
-mongoose.connect(DB_URL, { useNewUrlParser: true })
+mongoose
+  .connect(DB_URL, { useNewUrlParser: true })
   .then(() => {
     spotifyApi.token = SPOTIFY_API_TOKEN;
     logic.jwtSecret = JWT_SECRET;
@@ -75,9 +77,9 @@ mongoose.connect(DB_URL, { useNewUrlParser: true })
   })
   .catch(console.error);
 
- process.on('SIGINT', async () => {
-    await mongoose.disconnect()
-    console.log('\nserver stopped')
-            
-    process.exit(0)
-  })
+process.on("SIGINT", async () => {
+  await mongoose.disconnect();
+  console.log("\nserver stopped");
+
+  process.exit(0);
+});

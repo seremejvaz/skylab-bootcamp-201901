@@ -6,7 +6,7 @@ const spotifyApi = require("../spotify-api");
 const { User, Comment } = require("../models");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const users = require("../data/users") 
+//const users = require("../data/users")
 
 const {
   env: { SECRET }
@@ -55,7 +55,7 @@ const logic = {
       throw Error("passwords do not match");
     // return userApi.register(name, surname, email, password)
     return (async () => {
-      debugger;
+      debugger
       const user = await User.findOne({ email });
       if (user) throw Error(`user with email ${email} already exists`);
       const hash = await bcrypt.hash(password, 10);
@@ -86,7 +86,7 @@ const logic = {
     if (!password.trim().length) throw Error("password cannot be empty");
 
     return (async () => {
-      const user = await users.findByEmail(email);
+      const user = await User.findOne(email);
       if (!user) throw Error(`user with email ${email} not found`);
       if (user.password !== password) throw Error("wrong credentials");
 
@@ -101,7 +101,7 @@ const logic = {
 
         return { id: user.id, token };
       }
-    })()
+    })();
   },
 
   __verifyToken__(token) {
@@ -116,16 +116,15 @@ const logic = {
     const userId = this.__verifyToken__(token);
 
     return (async () => {
-      await users.findById(userId);
-      await (user => {
-        if (!user) throw Error(`user with id ${id} not found`);
+      const user = await User.findById(user.userId);
 
-        delete user.password;
+      if (!user) throw Error(`user with id ${id} not found`);
 
-        return user;
-      });
+      delete user.password;
+
+      return user;
     })();
-  },
+    },
 
   updateUser(userId, token, data) {
     if (typeof token !== "string") throw TypeError(`${token} is not a string`);
@@ -148,7 +147,8 @@ const logic = {
       throw Error;
     }
 
-    return users.update(userId, data);
+    return User.findByIdAndUpdate(userId, data)
+    //save() ??
   },
   /**
    *
@@ -168,7 +168,7 @@ const logic = {
       throw Error;
     }
 
-    return users.remove(userId);
+    return User.deleteOne(userId);
   },
 
   /**

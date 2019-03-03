@@ -38,8 +38,8 @@ class App extends Component {
           path="/register"
           render={() => <Register onRegister={handleRegister} />}
         />
-        <Route path="/login" render={() => <Login onLogin={handleLogin} />} />}
-        <Route path="/home" render={() => <Home />} />
+        <Route path="/login" render={() => <Login onLogin={handleLogin} />} />
+        <Route path="/home" render={Home} />
       </main>
     );
   }

@@ -9,7 +9,7 @@ class Register extends Component {
     surname: null,
     email: null,
     password: null,
-    passwordConformation: null
+    passwordConfirmation: null
   };
 
   handleNameInput = event => this.setState({ name: event.target.value });
